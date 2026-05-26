@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpecStudio — Clarity before code.</title>
+  <meta name="description" content="Specification-driven systems design and development. SpecStudio helps founders and technical teams transform ambiguous ideas into coherent digital systems through structured thinking and architectural clarity." />
+
+  <link rel="canonical" href="https://specstudio.net/" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://specstudio.net/" />
+  <meta property="og:title" content="SpecStudio — Clarity before code." />
+  <meta property="og:description" content="Specification-driven systems design and development. Structured thinking for digital systems." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SpecStudio — Clarity before code." />
+  <meta name="twitter:description" content="Specification-driven systems design and development. Structured thinking for digital systems." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.06), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 120px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.95;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 28px;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 18px;
+    }
+
+    p {
+      color: rgba(231, 226, 217, 0.72);
+      max-width: 580px;
+      font-size: 1.05rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-inner {
+      max-width: 880px;
+    }
+
+    .logo-wrap {
+      margin-bottom: 56px;
+    }
+
+    .logo {
+      width: min(928px, 92vw);
+      height: auto;
+      max-width: 928px;
+      aspect-ratio: 928 / 444;
+      opacity: 0.96;
+      filter: drop-shadow(0 0 24px rgba(255,255,255,0.03));
+      display: block;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 42px;
+    }
+
+    .tagline {
+      color: var(--text);
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+    }
+
+    .button:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 40px;
+    }
+
+    .card {
+      padding: 36px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.015);
+      backdrop-filter: blur(8px);
+    }
+
+    .card p {
+      font-size: 0.98rem;
+    }
+
+    .philosophy {
+      max-width: 840px;
+    }
+
+    .philosophy p {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      margin-bottom: 24px;
+    }
+
+    .philosophy-lede {
+      margin-bottom: 40px;
+      color: var(--text);
+      font-size: 1.2rem;
+    }
+
+    .footer-tagline {
+      margin-top: 10px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .service {
+      padding: 28px;
+      border: 1px solid var(--line);
+      transition: border-color 0.2s ease;
+    }
+
+    .service:hover {
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .notes {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .note {
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .note span {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .closing {
+      text-align: center;
+    }
+
+    .closing p {
+      margin: 0 auto 40px auto;
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+
+      section {
+        padding: 80px 0;
+      }
+
+      h1 {
+        font-size: clamp(2.75rem, 12vw, 4rem);
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 140px;
+        padding-bottom: 120px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <div class="container hero-inner">
+
+      <div class="logo-wrap">
+  <picture>
+    <source srcset="SpecStudio_Logo.webp" type="image/webp">
+    <img
+      src="SpecStudio_Logo.png"
+      alt="SpecStudio"
+      class="logo"
+      width="928"
+      height="444"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+</div>
+
+      <div class="mono">SpecStudio.net</div>
+
+      <h1>SpecStudio</h1>
+
+      <div class="tagline">
+        Clarity before code.
+      </div>
+
+      <p>
+        Specification-driven systems design and development.
+        We help founders and technical teams transform ambiguous ideas
+        into coherent digital systems through structured thinking and architectural clarity.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#contact" class="button">
+          Start a Conversation
+        </a>
+        <a href="projects.html" class="button">
+          Projects
+        </a>
+      </div>
+      
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+
+      <div class="mono">The Problem</div>
+
+      <h2>
+        Most software problems begin long before implementation.
+      </h2>
+
+      <p>
+        Unclear requirements. Fragmented workflows.
+        Feature accumulation without architectural vision.
+        Interfaces built without conceptual coherence.
+      </p>
+
+      <p>
+        Modern AI tools can generate code rapidly.
+        But speed without clarity creates complexity.
+        Scope creep without structural discipline.
+        Codebase grows but coherence disappears.
+      </p>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <div class="mono">Approach</div>
+
+      <h2>Specify. Design. Build.</h2>
+
+      <div class="grid-3">
+
+        <div class="card">
+          <h3>Specify</h3>
+
+          <p>
+            Clarifying intent, workflows, requirements,
+            and technical structure before implementation begins.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Design</h3>
+
+          <p>
+            Creating restrained, coherent interfaces
+            and systems that feel understandable and durable.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Build</h3>
+
+          <p>
+            Careful implementation using modern frameworks,
+            automation, and AI-assisted development workflows.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container philosophy">
+
+      <div class="mono">Philosophy</div>
+
+      <h2>Thoughtful systems endure.</h2>
+
+      <p class="philosophy-lede">
+        Structured thinking for digital systems.
+      </p>
+
+      <p>
+        We believe good software begins with discrimination:
+        knowing what should exist,
+        what should be removed,
+        and how complexity can be transformed into clarity.
+      </p>
+
+      <p>
+        Specification is not bureaucracy.
+        It is architecture.
+      </p>
+
+      <p>
+        Taste is not decoration.
+        It is judgment applied to systems.
+      </p>
+
+      <p>
+        Technology should reduce friction,
+        not multiply confusion.
+      </p>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <div class="mono">Services</div>
+
+      <h2>Capabilities</h2>
+
+      <div class="services">
+
+        <div class="service">
+          <h3>Specification Engineering</h3>
+          <p>Transforming ideas into coherent technical direction.</p>
+        </div>
+
+        <div class="service">
+          <h3>Product Architecture</h3>
+          <p>Structuring systems before implementation begins.</p>
+        </div>
+
+        <div class="service">
+          <h3>AI-Assisted Development</h3>
+          <p>Modern tooling guided by human architectural oversight.</p>
+        </div>
+
+        <div class="service">
+          <h3>Interface Systems</h3>
+          <p>Minimal, coherent, human-centered interaction design.</p>
+        </div>
+
+        <div class="service">
+          <h3>Technical Writing</h3>
+          <p>Structured communication and documentation systems.</p>
+        </div>
+
+        <div class="service">
+          <h3>Digital Infrastructure</h3>
+          <p>Deployment, automation, and operational continuity.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+
+      <div class="mono">Studio Notes</div>
+
+      <h2>Ideas and Observations</h2>
+
+      <div class="notes">
+
+        <div class="note">
+          <h3>Architecture Before Automation</h3>
+
+          <p>
+            Modern AI systems can generate astonishing amounts of code,
+            but implementation speed does not eliminate the need for architectural clarity.
+            In many cases, it magnifies the consequences of poor specification.
+          </p>
+
+          <p>
+            Automation without coherent structure tends to produce fragile systems,
+            inconsistent interfaces, and long-term technical entropy.
+            Good architecture establishes boundaries, relationships,
+            and conceptual integrity before acceleration begins.
+          </p>
+        </div>
+
+        <div class="note">
+          <h3>The Return of Taste in Software</h3>
+
+          <p>
+            As code generation becomes increasingly commoditized,
+            judgment becomes more valuable.
+            The essential question is no longer whether something can be built,
+            but whether it should exist in its current form at all.
+          </p>
+
+          <p>
+            Taste in software is not visual decoration.
+            It is the disciplined ability to reduce unnecessary complexity,
+            preserve coherence across systems,
+            and create interactions that feel calm, intelligible, and durable.
+          </p>
+        </div>
+
+        <div class="note">
+          <h3>AI Generates Code. Humans Define Systems.</h3>
+
+          <p>
+            Large language models have changed implementation workflows permanently.
+            They are extraordinarily effective at producing components,
+            patterns, and technical scaffolding.
+            But they do not possess responsibility for conceptual direction.
+          </p>
+
+          <p>
+            Human oversight remains essential at the level of architecture,
+            specification, ethics, and long-term system coherence.
+            Structured thinking remains the essential human layer for digital systems.
+            The future of development belongs not merely to faster builders,
+            but to people capable of defining meaningful and understandable systems.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container closing">
+
+      <div class="mono">Contact</div>
+
+      <h2>
+        Coherent systems begin with clear thinking.
+      </h2>
+
+      <p>
+        SpecStudio combines architectural reasoning,
+        specification discipline,
+        and modern implementation workflows
+        to create software that feels intentional,
+        understandable, and durable.
+      </p>
+
+      <a href="mailto:hello@specstudio.net" class="button">
+        hello@specstudio.net
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/ConsciousnessResearch?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpecStudio — Projects</title>
+  <meta name="description" content="SpecStudio projects in development — AI-assisted interfaces, astrological systems design, and contemplative software. Featuring AIM, the Jyotiṣa Aspectarian, and Zhēn Yì." />
+
+  <link rel="canonical" href="https://specstudio.net/projects.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://specstudio.net/projects.html" />
+  <meta property="og:title" content="SpecStudio — Projects" />
+  <meta property="og:description" content="Ongoing explorations in AI-assisted interfaces, astrological systems design, and human-centered software." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SpecStudio — Projects" />
+  <meta name="twitter:description" content="Ongoing explorations in AI-assisted interfaces, astrological systems design, and human-centered software." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --card: rgba(255,255,255,0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      color: #7eb8f7;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.05), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 120px 0 100px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 9vw, 7rem);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin-bottom: 32px;
+    }
+
+    .intro {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    main {
+      padding: 80px 0 140px;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 120px;
+      padding-bottom: 80px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project:last-child {
+      border-bottom: none;
+    }
+
+    .project-image {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 20px;
+      backdrop-filter: blur(12px);
+    }
+
+    .project-image img {
+      width: 100%;
+      display: block;
+      border-radius: 2px;
+    }
+
+    .project-info h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-bottom: 22px;
+    }
+
+    .project-tag {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 6px 12px;
+      margin-bottom: 28px;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    .project-info p {
+      color: var(--muted);
+      margin-bottom: 22px;
+      font-size: 1.03rem;
+    }
+
+    .project-notes {
+      margin-top: 28px;
+      padding-left: 18px;
+    }
+
+    .project-notes li {
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-tagline {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 900px) {
+
+      .project {
+        grid-template-columns: 1fr;
+        gap: 42px;
+      }
+
+      header {
+        padding-top: 100px;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+
+      <div class="mono">SpecStudio / Projects</div>
+
+      <h1>
+        Systems in Development
+      </h1>
+
+      <p class="intro">
+        SpecStudio combines structured thinking, specification discipline,
+        and modern implementation workflows to create coherent digital systems.
+        These projects represent ongoing explorations in AI-assisted interfaces,
+        astrological systems design, and human-centered software.
+      </p>
+
+    </div>
+  </header>
+
+  <main>
+
+    <div class="container">
+
+      <section class="project">
+
+        <div class="project-image">
+          <picture>
+            <source srcset="AIM_Screenshot.webp" type="image/webp">
+            <img
+              src="AIM_Screenshot.png"
+              alt="Screenshot of the AIM application interface"
+              width="1200"
+              height="915"
+              loading="lazy"
+              decoding="async"
+            >
+          </picture>
+        </div>
+
+        <div class="project-info">
+
+          <div class="project-tag">AI Systems</div>
+
+          <h2>AIM</h2>
+
+          <p>
+            AIM is an experimental AI-oriented systems platform focused on
+            structured interaction, workflow coherence, and intelligent guidance.
+            Rather than treating AI as a novelty layer,
+            the project explores how large language models can participate within
+            carefully designed human-centered systems.
+          </p>
+
+          <p>
+            The emphasis is not merely on automation,
+            but on creating interfaces that preserve orientation,
+            continuity, and conceptual clarity while interacting with complex tools.
+          </p>
+
+          <ul class="project-notes">
+            <li>Specification-first workflow architecture</li>
+            <li>Human-guided AI interaction systems</li>
+            <li>Structured conversational interfaces</li>
+            <li>Long-form continuity and memory exploration</li>
+          </ul>
+          <p><a href="AIM_Specification_v3.2.pdf" download>Download Spec</a></p>
+        </div>
+
+      </section>
+
+      <section class="project">
+
+        <div class="project-image">
+          <picture>
+            <source srcset="jyotish-aspectarian.webp" type="image/webp">
+            <img
+              src="jyotish-aspectarian.jpg"
+              alt="Screenshot of the Jyotiṣa Aspectarian astrological interface"
+              width="1200"
+              height="753"
+              loading="lazy"
+              decoding="async"
+            >
+          </picture>
+        </div>
+
+        <div class="project-info">
+
+          <div class="project-tag">Astrological Systems</div>
+
+          <h2>Jyotiṣa Aspectarian</h2>
+
+          <p>
+            The Jyotiṣa Aspectarian is a specialized astrological platform designed
+            to visualize planetary relationships, transits, and dynamic aspect structures
+            across time.
+          </p>
+
+          <p>
+            The project combines traditional Jyotiṣa concepts with contemporary interface design,
+            emphasizing readability, temporal navigation,
+            and symbolic coherence rather than excessive visual complexity.
+          </p>
+
+          <ul class="project-notes">
+            <li>Swiss Ephemeris integration</li>
+            <li>Transit and aspect visualization systems</li>
+            <li>Lunar-cycle-oriented navigation</li>
+            <li>Human-readable astrological architecture</li>
+          </ul>
+           <p><a href="Aspectarian_Spec_v1.4.pdf" download>Download Spec</a></p>
+
+        </div>
+
+      </section>
+
+      <section class="project">
+
+        <div class="project-image">
+          <picture>
+            <source srcset="zhen_yi_screenshot.webp" type="image/webp">
+            <img
+              src="zhen_yi_screenshot.png"
+              alt="Screenshot of the Zhēn Yì Yìjīng application"
+              width="1200"
+              height="646"
+              loading="lazy"
+              decoding="async"
+            >
+          </picture>
+        </div>
+
+        <div class="project-info">
+
+          <div class="project-tag">Contemplative Systems</div>
+
+          <h2>Zhēn Yì</h2>
+
+          <p>
+            Zhēn Yì is a focused desktop application for working with the Yìjīng (易經),
+            the Book of Changes. It brings together three traditional practices —
+            casting a reading in the spirit of the yarrow-stalk method, studying the
+            sixty-four hexagrams through the full Wilhelm translation in Pīnyīn
+            romanisation, and maintaining a personal journal of readings over time —
+            within a single, local, single-user environment designed for the
+            experienced practitioner rather than the curious newcomer.
+          </p>
+
+          <ul class="project-notes">
+            <li>Yarrow-stalk-faithful casting algorithm</li>
+            <li>Full Wilhelm translation with Pīnyīn romanisation</li>
+            <li>Local-first journal of readings</li>
+            <li>Quiet, dark-themed interface for sustained study</li>
+          </ul>
+          <p><a href="yijing_app_spec_0.5.pdf" download>Download Spec</a></p>
+
+        </div>
+
+      </section>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+
+        <p class="footer-tagline">
+          Structured thinking for digital systems.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/ConsciousnessResearch?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
