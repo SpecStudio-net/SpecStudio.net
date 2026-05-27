@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpecStudio — Case Study: AIM</title>
+  <meta name="description" content="A case study on AIM (Advaita Inquiry Matrix) — software designed to be left rather than returned to. Notes on the pedagogical stance, how it is wired into the spec, and where the same commitment applies elsewhere." />
+
+  <link rel="canonical" href="https://specstudio.net/case-study-aim.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://specstudio.net/case-study-aim.html" />
+  <meta property="og:title" content="SpecStudio — Case Study: AIM" />
+  <meta property="og:description" content="Software designed to be left. A case study on the pedagogical stance encoded in AIM's spec." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SpecStudio — Case Study: AIM" />
+  <meta name="twitter:description" content="Software designed to be left. A case study on the pedagogical stance encoded in AIM's spec." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      color: #7eb8f7;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.05), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      line-height: 1.75;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .container {
+      width: min(820px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 120px 0 60px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+
+    .crumbs a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .crumbs a:hover {
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      margin-bottom: 28px;
+    }
+
+    .lede {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 680px;
+    }
+
+    main {
+      padding: 70px 0 120px;
+    }
+
+    section.block {
+      padding: 28px 0 36px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section.block:last-child {
+      border-bottom: none;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    p {
+      color: rgba(231, 226, 217, 0.78);
+      margin-bottom: 1.1rem;
+      font-size: 1.02rem;
+    }
+
+    blockquote {
+      margin: 0 0 1.1rem 0;
+      padding: 8px 0 8px 18px;
+      border-left: 2px solid var(--accent);
+      color: var(--text);
+      font-size: 1.02rem;
+      font-style: normal;
+    }
+
+    .consequences p {
+      margin-bottom: 1.3rem;
+    }
+
+    .consequences strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .transfer {
+      list-style: none;
+      padding: 0;
+      margin: 6px 0 4px;
+    }
+
+    .transfer li {
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+      color: rgba(231, 226, 217, 0.82);
+      font-size: 0.98rem;
+    }
+
+    .transfer li:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .transfer .label {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .closing {
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .closing p {
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-tagline {
+      color: var(--muted);
+      margin-top: 10px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding-top: 90px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+
+      <div class="mono crumbs">
+        <a href="index.html">SpecStudio</a> &nbsp;/&nbsp;
+        <a href="projects.html">Projects</a> &nbsp;/&nbsp;
+        Case Study — AIM
+      </div>
+
+      <h1>AIM is built to be left.</h1>
+
+      <p class="lede">
+        AIM unfolds Advaita Vedānta to a student through dialogue.
+        Its success criterion, taken from the spec,
+        is the student's independence from the system.
+        Every other choice in the architecture follows from that commitment.
+      </p>
+
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section class="block">
+        <h2>The criterion, stated</h2>
+
+        <blockquote>
+          The highest operational success of AIM
+          is the student's independence from the system.
+          Intervention reduces as clarity stabilizes.
+        </blockquote>
+
+        <p>
+          That is the spec, not a positioning line.
+          The metric is intervention frequency, declining over time.
+          Retention is not measured.
+          Growth of the user base is not a goal.
+        </p>
+      </section>
+
+      <section class="block">
+        <h2>Why the criterion is admissible here</h2>
+
+        <p>
+          Most software cannot adopt this criterion.
+          The dominant consensus in consumer software, and in most edtech,
+          reads a user's return as a positive signal.
+          In material where the cost of skipping a step is forgetting,
+          that is defensible — the user will come back, re-encounter, and recover.
+        </p>
+
+        <p>
+          Advaita is not that material.
+          A student who reaches an identity-level statement
+          ("I am <em>Brahman</em>")
+          without having stabilized the dependent terms
+          can collapse into nihilism,
+          or into a pseudo-realization that is now harder to dislodge
+          than the original confusion.
+          A student who keeps returning to the system without stabilizing
+          is being held in place.
+          Retention, here, is a sign of pedagogical failure.
+        </p>
+
+        <p>
+          The success criterion is not a virtue. The material requires it.
+        </p>
+      </section>
+
+      <section class="block consequences">
+        <h2>How the commitment is wired</h2>
+
+        <p>
+          Because the goal is the student's exit, three things had to be true
+          at the architecture level. Each is a refusal as much as a design choice.
+        </p>
+
+        <p>
+          <strong>Content and progression are separated.</strong>
+          The corpus — Sanskrit, transliteration, translation, conceptual tags,
+          and <em>prakriyā</em> designation (the traditional teaching procedure the passage serves) — is static.
+          The per-student state machine that decides what to surface, when,
+          and under what gating is dynamic and held elsewhere.
+          Pedagogy is never baked into content.
+        </p>
+
+        <p>
+          <strong>Readiness is inferred, not declared.</strong>
+          There is no level selector.
+          <em>Adhikāra</em> — readiness to receive the teaching — is read from the conversation:
+          coherence, logical consistency, responsiveness to refinement,
+          and definitions that hold up when pressed.
+          Three modes — Exploratory, Structural, Precision —
+          gate how strictly definitional clarity is enforced.
+          Identity-level claims — "I am <em>Brahman</em>" and its variants —
+          auto-escalate to Precision;
+          definitions are hard-blocked until dependent terms are stable.
+          The student is never told their level.
+          Self-declared levels are how growth-mode software flatters users
+          into staying longer than they should.
+        </p>
+
+        <p>
+          <strong>Agitation is read diagnostically, not therapeutically.</strong>
+          When a student becomes agitated, the system does not soothe.
+          It reverts to definitional clarification.
+          The reference is the <em>Mahānidāna Sutta</em>'s
+          <em>nāma-rūpa</em> ↔ <em>viññāṇa</em> feedback loop:
+          an unstable ontology destabilizes cognition; tightening it stabilizes it.
+          This is the move consumer software cannot make,
+          because soothing is what produces return visits.
+        </p>
+      </section>
+
+      <section class="block">
+        <h2>Where the stance transfers</h2>
+
+        <p>
+          The architecture is portable. The stance is harder.
+          In any domain where the user's growth is the actual goal,
+          retention curves should fall.
+          The list below is not a survey of fields where the architecture works.
+          It is a list of fields where the same refusal is overdue.
+        </p>
+
+        <ul class="transfer">
+          <li>
+            <span class="label">Medical training</span>
+            A diagnostic-reasoning tool whose usage does not decline
+            as the trainee matures is being used as a crutch, not a teacher.
+            Healthy progression should look like the platform going quiet.
+          </li>
+          <li>
+            <span class="label">Legal education</span>
+            A doctrinal study aid that students never outgrow is selling completion,
+            not competence.
+            Argumentation should be gated behind terminology
+            the student can no longer have wrong —
+            and once that grasp is stable, the tool should fall out of the workflow.
+          </li>
+          <li>
+            <span class="label">Security education</span>
+            A course that keeps red-teaming a student past the point of independence
+            is selling certification, not capability.
+            By month six, the student should be running their own exercises
+            and ignoring the platform.
+          </li>
+          <li>
+            <span class="label">Foundational mathematics</span>
+            A tutoring system whose engagement curve does not decline
+            is selling tutoring, not understanding.
+            The teacher who keeps a student forever has failed at the teaching.
+          </li>
+          <li>
+            <span class="label">Technical onboarding</span>
+            An onboarding tool a new engineer leans on after month three
+            is not onboarding software. It is dependency.
+            The deploy path the engineer can explain under pressure
+            is the only completion criterion that matters.
+          </li>
+        </ul>
+
+        <p style="margin-top: 22px;">
+          The pattern is the same: success is exit.
+          Intervention should trend toward zero.
+        </p>
+      </section>
+
+      <div class="closing">
+        <p>
+          The architecture is the easy part.
+          Committing to a success metric that makes growth uncomfortable
+          is the hard part.
+        </p>
+        <p>
+          The full specification — agents,
+          the Terminological Integrity Layer,
+          the escalation and containment logic —
+          is here: <a href="AIM_Specification_v3.2.pdf" download>AIM Specification v3.2 (PDF)</a>.
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="projects.html">Projects</a>
+        <a href="index.html">Home</a>
+        <a href="https://github.com/ConsciousnessResearch?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
