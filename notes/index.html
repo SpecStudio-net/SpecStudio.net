@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Notes — SpecStudio</title>
+  <meta name="description" content="Ideas and observations on software architecture, specification, and the discipline of building coherent digital systems." />
+
+  <link rel="canonical" href="https://specstudio.net/notes/" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="SpecStudio Studio Notes" href="https://specstudio.net/notes/feed.xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://specstudio.net/notes/" />
+  <meta property="og:title" content="Studio Notes — SpecStudio" />
+  <meta property="og:description" content="Ideas and observations on software architecture, specification, and the discipline of building coherent digital systems." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Studio Notes — SpecStudio" />
+  <meta name="twitter:description" content="Ideas and observations on software architecture, specification, and the discipline of building coherent digital systems." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.06), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 120px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    h1, h2, h3 {
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.0;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 28px;
+    }
+
+    p {
+      color: rgba(231, 226, 217, 0.72);
+      max-width: 580px;
+      font-size: 1.05rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      padding: 140px 0 100px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    /* Essay list */
+
+    .essay-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .essay-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 40px;
+      padding: 48px 0;
+      border-bottom: 1px solid var(--line);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s ease;
+    }
+
+    .essay-item:first-child {
+      border-top: 1px solid var(--line);
+    }
+
+    .essay-item:hover .essay-title {
+      color: var(--text);
+    }
+
+    .essay-item:hover .essay-arrow {
+      transform: translateX(4px);
+    }
+
+    .essay-date {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      padding-top: 6px;
+    }
+
+    .essay-title {
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: rgba(231, 226, 217, 0.88);
+      margin-bottom: 12px;
+      transition: color 0.2s ease;
+    }
+
+    .essay-excerpt {
+      color: rgba(231, 226, 217, 0.55);
+      font-size: 0.98rem;
+      max-width: 560px;
+      margin-bottom: 16px;
+      line-height: 1.75;
+    }
+
+    .essay-arrow {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    /* RSS note */
+
+    .rss-note {
+      margin-top: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rss-note a {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.3);
+      transition: border-color 0.2s ease;
+    }
+
+    .rss-note a:hover {
+      border-color: var(--accent);
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+    }
+
+    .button:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-tagline {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+
+      section {
+        padding: 80px 0;
+      }
+
+      .hero {
+        padding: 100px 0 80px;
+      }
+
+      .essay-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header class="hero">
+    <div class="container">
+
+      <div class="mono" style="margin-bottom: 48px;">
+        <a href="../index.html" style="color: var(--accent); text-decoration: none;">SpecStudio.net</a>
+        &nbsp;/&nbsp; Studio Notes
+      </div>
+
+      <h1>Studio Notes</h1>
+
+      <p>
+        Ideas and observations on software architecture,
+        specification discipline, and the practice of building
+        coherent digital systems.
+      </p>
+
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+
+      <div class="essay-list">
+
+        <a href="architecture-before-automation.html" class="essay-item">
+          <div class="essay-date">2026 — 01</div>
+          <div>
+            <div class="essay-title">Architecture Before Automation</div>
+            <div class="essay-excerpt">
+              Modern AI systems can generate astonishing amounts of code,
+              but implementation speed does not eliminate the need for architectural clarity.
+              In many cases, it magnifies the consequences of poor specification.
+            </div>
+            <span class="essay-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="the-return-of-taste-in-software.html" class="essay-item">
+          <div class="essay-date">2026 — 02</div>
+          <div>
+            <div class="essay-title">The Return of Taste in Software</div>
+            <div class="essay-excerpt">
+              As code generation becomes increasingly commoditized, judgment becomes more valuable.
+              The essential question is no longer whether something can be built,
+              but whether it should exist in its current form at all.
+            </div>
+            <span class="essay-arrow">Read →</span>
+          </div>
+        </a>
+
+        <a href="ai-generates-code-humans-define-systems.html" class="essay-item">
+          <div class="essay-date">2026 — 03</div>
+          <div>
+            <div class="essay-title">AI Generates Code. Humans Define Systems.</div>
+            <div class="essay-excerpt">
+              Large language models have changed implementation workflows permanently.
+              They are extraordinarily effective at producing components, patterns, and technical scaffolding.
+              But they do not possess responsibility for conceptual direction.
+            </div>
+            <span class="essay-arrow">Read →</span>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="rss-note">
+        <span class="mono" style="font-size: 0.8rem;">Subscribe</span>
+        <a href="feed.xml">RSS Feed</a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="../projects.html">Projects</a>
+        <a href="https://github.com/ConsciousnessResearch?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

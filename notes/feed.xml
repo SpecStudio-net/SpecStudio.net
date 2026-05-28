@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SpecStudio Studio Notes</title>
+    <link>https://specstudio.net/notes/</link>
+    <description>Ideas and observations on software architecture, specification discipline, and the practice of building coherent digital systems.</description>
+    <language>en-us</language>
+    <atom:link href="https://specstudio.net/notes/feed.xml" rel="self" type="application/rss+xml"/>
+    <lastBuildDate>Thu, 01 Jan 2026 00:00:00 +0000</lastBuildDate>
+
+    <item>
+      <title>Architecture Before Automation</title>
+      <link>https://specstudio.net/notes/architecture-before-automation.html</link>
+      <guid isPermaLink="true">https://specstudio.net/notes/architecture-before-automation.html</guid>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <description>
+        Implementation speed does not eliminate the need for architectural clarity.
+        In many cases, it magnifies the consequences of poor specification.
+        Automation without coherent structure tends to produce fragile systems,
+        inconsistent interfaces, and long-term technical entropy.
+      </description>
+    </item>
+
+    <item>
+      <title>The Return of Taste in Software</title>
+      <link>https://specstudio.net/notes/the-return-of-taste-in-software.html</link>
+      <guid isPermaLink="true">https://specstudio.net/notes/the-return-of-taste-in-software.html</guid>
+      <pubDate>Fri, 01 Feb 2026 00:00:00 +0000</pubDate>
+      <description>
+        As code generation becomes increasingly commoditized, judgment becomes more valuable.
+        The essential question is no longer whether something can be built,
+        but whether it should exist in its current form at all.
+        Taste in software is not visual decoration — it is the disciplined ability
+        to reduce unnecessary complexity and preserve coherence across systems.
+      </description>
+    </item>
+
+    <item>
+      <title>AI Generates Code. Humans Define Systems.</title>
+      <link>https://specstudio.net/notes/ai-generates-code-humans-define-systems.html</link>
+      <guid isPermaLink="true">https://specstudio.net/notes/ai-generates-code-humans-define-systems.html</guid>
+      <pubDate>Sat, 01 Mar 2026 00:00:00 +0000</pubDate>
+      <description>
+        Large language models have changed implementation workflows permanently.
+        They are extraordinarily effective at producing components, patterns, and technical scaffolding.
+        But they do not possess responsibility for conceptual direction.
+        Human oversight remains essential at the level of architecture, specification, and long-term system coherence.
+      </description>
+    </item>
+
+  </channel>
+</rss>
