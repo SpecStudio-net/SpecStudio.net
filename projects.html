@@ -23,7 +23,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
@@ -35,6 +34,7 @@
       --muted: #a7adb7;
       --line: rgba(255,255,255,0.08);
       --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
       --card: rgba(255,255,255,0.02);
     }
 
@@ -177,6 +177,73 @@
     .project-notes li {
       color: var(--muted);
       margin-bottom: 12px;
+    }
+
+    /* Waitlist form */
+
+    .waitlist {
+      margin-top: 32px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line);
+    }
+
+    .waitlist-label {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .waitlist form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .waitlist input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .waitlist input[type="email"]::placeholder {
+      color: var(--muted);
+    }
+
+    .waitlist input[type="email"]:focus {
+      border-color: var(--accent);
+    }
+
+    .waitlist input[type="submit"] {
+      padding: 12px 24px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .waitlist input[type="submit"]:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .waitlist p {
+      display: none;
     }
 
     footer {
@@ -341,7 +408,21 @@
             <li>Lunar-cycle-oriented navigation</li>
             <li>Human-readable astrological architecture</li>
           </ul>
-           <p><a href="Aspectarian_Spec_v1.4.pdf" download>Download Spec</a></p>
+
+          <p><a href="Aspectarian_Spec_v1.4.pdf" download>Download Spec</a></p>
+
+          <div class="waitlist">
+            <span class="waitlist-label">Notify me when it's available</span>
+            <form
+              action="https://buttondown.com/api/emails/embed-subscribe/bhagavan"
+              method="post"
+              class="embeddable-buttondown-form"
+            >
+              <input type="email" name="email" id="bd-email-aspectarian" placeholder="your@email.com" />
+              <input type="submit" value="Notify me" />
+              <p><a href="https://buttondown.com/refer/bhagavan" target="_blank">Powered by Buttondown.</a></p>
+            </form>
+          </div>
 
         </div>
 
@@ -385,7 +466,21 @@
             <li>Local-first journal of readings</li>
             <li>Quiet, dark-themed interface for sustained study</li>
           </ul>
+
           <p><a href="yijing_app_spec_0.5.pdf" download>Download Spec</a></p>
+
+          <div class="waitlist">
+            <span class="waitlist-label">Notify me when it's available</span>
+            <form
+              action="https://buttondown.com/api/emails/embed-subscribe/bhagavan"
+              method="post"
+              class="embeddable-buttondown-form"
+            >
+              <input type="email" name="email" id="bd-email-zhenyi" placeholder="your@email.com" />
+              <input type="submit" value="Notify me" />
+              <p><a href="https://buttondown.com/refer/bhagavan" target="_blank">Powered by Buttondown.</a></p>
+            </form>
+          </div>
 
         </div>
 
@@ -399,7 +494,6 @@
 
       <div>
         <div class="mono">SpecStudio.net</div>
-
         <p class="footer-tagline">
           Structured thinking for digital systems.
         </p>
@@ -407,7 +501,8 @@
 
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="https://github.com/SpecStudio-net?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+        <a href="notes/">Notes</a>
+        <a href="https://github.com/SpecStudio-net" rel="me noopener" target="_blank">GitHub</a>
       </div>
 
     </div>
