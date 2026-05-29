@@ -1,0 +1,53 @@
+<svg viewBox="0 0 710 530" xmlns="http://www.w3.org/2000/svg" role="img" style="">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">AIM Audience Venn Diagram</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Three overlapping circles representing AI researchers, contemplatives, and formal logicians, with AIM at the center.</desc>
+
+  
+
+  <!-- background -->
+  <rect width="700" height="520" fill="transparent" style="fill:rgba(0, 0, 0, 0);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Circle 1: AI Researchers — top -->
+  <circle cx="350" cy="175" r="155" fill="rgba(124,138,161,0.10)" stroke="#7c8aa1" stroke-width="1" opacity="0.85" style="fill:rgba(124, 138, 161, 0.1);stroke:rgb(124, 138, 161);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Circle 2: Contemplatives — bottom left -->
+  <circle cx="245" cy="345" r="155" fill="rgba(124,138,161,0.10)" stroke="#7c8aa1" stroke-width="1" opacity="0.85" style="fill:rgba(124, 138, 161, 0.1);stroke:rgb(124, 138, 161);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Circle 3: Formal logicians — bottom right -->
+  <circle cx="455" cy="345" r="155" fill="rgba(124,138,161,0.10)" stroke="#7c8aa1" stroke-width="1" opacity="0.85" style="fill:rgba(124, 138, 161, 0.1);stroke:rgb(124, 138, 161);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Center highlight -->
+  <ellipse cx="350" cy="300" rx="52" ry="44" fill="rgba(124,138,161,0.18)" stroke="rgba(124,138,161,0.5)" stroke-width="1" style="fill:rgba(124, 138, 161, 0.18);stroke:rgba(124, 138, 161, 0.5);color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- AI label -->
+  <text x="350" y="96" text-anchor="middle" style="fill:rgb(231, 226, 217);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:13px;font-weight:500;text-anchor:middle;dominant-baseline:auto">AI Researchers</text>
+  <text x="350" y="113" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">philosophy of mind</text>
+  <text x="350" y="128" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">interaction design</text>
+
+  <!-- Contemplatives label -->
+  <text x="134" y="390" text-anchor="middle" style="fill:rgb(231, 226, 217);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:13px;font-weight:500;text-anchor:middle;dominant-baseline:auto">Contemplatives</text>
+  <text x="134" y="407" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">Vedānta tradition</text>
+  <text x="134" y="422" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">practitioner audience</text>
+
+  <!-- Formal logicians label -->
+  <text x="566" y="390" text-anchor="middle" style="fill:rgb(231, 226, 217);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:13px;font-weight:500;text-anchor:middle;dominant-baseline:auto">Logicians</text>
+  <text x="566" y="407" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">proof assistants</text>
+  <text x="566" y="422" text-anchor="middle" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">formal philosophy</text>
+
+  <!-- Pairwise intersection labels -->
+  <!-- AI + Contemplatives -->
+  <text x="240" y="228" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">consciousness</text>
+  <text x="240" y="243" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">studies</text>
+
+  <!-- AI + Logicians -->
+  <text x="460" y="228" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">formal AI</text>
+  <text x="460" y="243" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">foundations</text>
+
+  <!-- Contemplatives + Logicians -->
+  <text x="350" y="448" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">philosophy</text>
+  <text x="350" y="463" text-anchor="middle" fill="#7c8aa1" style="fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:11px;font-weight:400;text-anchor:middle;dominant-baseline:auto">of religion</text>
+
+  <!-- Center label -->
+  <text x="350" y="296" text-anchor="middle" style="fill:rgb(231, 226, 217);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, &quot;Courier New&quot;, monospace;font-size:12px;font-weight:500;text-anchor:middle;dominant-baseline:auto">AIM</text>
+  <text x="350" y="312" text-anchor="middle" style="font-size:10px; fill:#a7adb7; font-family: 'IBM Plex Mono', monospace; letter-spacing:0.04em;;fill:rgb(167, 173, 183);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;IBM Plex Mono&quot;, monospace;font-size:10px;font-weight:400;text-anchor:middle;dominant-baseline:auto">SpecStudio</text>
+</svg>
