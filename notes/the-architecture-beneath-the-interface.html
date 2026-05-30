@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Architecture Beneath the Interface — SpecStudio</title>
+  <meta name="description" content="Most AI interaction design sidesteps the fundamental question: what is a human being, considered as a knowing subject? What is the structure of experience itself — and what does that structure imply for the design of an intelligent system?" />
+
+  <link rel="canonical" href="https://specstudio.net/notes/the-architecture-beneath-the-interface.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="SpecStudio Studio Notes" href="https://specstudio.net/notes/feed.xml" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://specstudio.net/notes/the-architecture-beneath-the-interface.html" />
+  <meta property="og:title" content="The Architecture Beneath the Interface — SpecStudio" />
+  <meta property="og:description" content="Most AI interaction design sidesteps the fundamental question: what is a human being, considered as a knowing subject? What is the structure of experience itself — and what does that structure imply for the design of an intelligent system?" />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Architecture Beneath the Interface — SpecStudio" />
+  <meta name="twitter:description" content="Most AI interaction design sidesteps the fundamental question: what is a human being, considered as a knowing subject? What is the structure of experience itself — and what does that structure imply for the design of an intelligent system?" />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.06), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Header */
+
+    .essay-header {
+      padding: 140px 0 80px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 64px;
+    }
+
+    .breadcrumb a {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--text);
+    }
+
+    .breadcrumb span {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .essay-meta {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .essay-date {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      max-width: 820px;
+      margin-bottom: 32px;
+    }
+
+    .essay-lede {
+      font-size: 1.25rem;
+      color: rgba(231, 226, 217, 0.75);
+      max-width: 640px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* Body */
+
+    .essay-body {
+      padding: 80px 0 120px;
+      border-top: 1px solid var(--line);
+    }
+
+    .prose {
+      max-width: 680px;
+    }
+
+    .prose p {
+      color: rgba(231, 226, 217, 0.80);
+      font-size: 1.1rem;
+      line-height: 1.95;
+      margin-bottom: 1.8rem;
+      max-width: none;
+    }
+
+    .prose h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-top: 3rem;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .prose blockquote {
+      border-left: 2px solid var(--accent);
+      padding-left: 28px;
+      margin: 2.4rem 0;
+      color: rgba(231, 226, 217, 0.65);
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.85;
+    }
+
+    .prose .colophon {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      color: rgba(231, 226, 217, 0.45);
+      font-size: 0.95rem;
+    }
+
+    .prose .colophon a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.3);
+      transition: border-color 0.2s ease;
+    }
+
+    .prose .colophon a:hover {
+      border-color: var(--accent);
+    }
+
+    /* Navigation */
+
+    .essay-nav {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .essay-nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.3);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-tagline {
+      margin-top: 10px;
+      color: rgba(231, 226, 217, 0.72);
+      font-size: 1.05rem;
+    }
+
+    @media (max-width: 768px) {
+
+      .essay-header {
+        padding: 100px 0 60px;
+      }
+
+      .essay-body {
+        padding: 60px 0 80px;
+      }
+
+      .essay-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <header class="essay-header">
+    <div class="container">
+
+      <div class="breadcrumb">
+        <a href="../index.html">SpecStudio.net</a>
+        <span> &nbsp;/&nbsp; </span>
+        <a href="index.html">Studio Notes</a>
+      </div>
+
+      <div class="essay-meta">
+        <span class="essay-date">2026 — 04</span>
+      </div>
+
+      <h1>The Architecture Beneath the Interface</h1>
+
+      <p class="essay-lede">
+        Most AI interaction design sidesteps the fundamental question:
+        what is a human being, considered as a knowing subject?
+        What is the structure of experience itself — and what does that structure
+        imply for the design of an intelligent system?
+      </p>
+
+    </div>
+  </header>
+
+  <article class="essay-body">
+    <div class="container">
+      <div class="prose">
+
+        <p>
+          There is a question that most AI systems or their designers never ask:
+          "What is the nature of the conscious being that will be interacting with the system?"
+        </p>
+
+        <p>
+          Not the user's demographic profile; not their stated preferences or prior behaviour.
+          The more fundamental question: what is a human being, considered as a knowing subject?
+          What is the structure of experience itself, and what does that structure imply
+          for the design of an intelligent system?
+        </p>
+
+        <p>
+          Most AI interaction design sidesteps this question entirely.
+          The implicit answer (when there is one at all) is behaviorist:
+          the user is a bundle of inputs and outputs, preferences and responses,
+          patterns to be modeled and satisfied. The architecture that follows from this assumption
+          is optimized for engagement, for task completion, for measurable outcomes.
+          It is not exactly wrong; it is just shallow — built on an unexamined premise
+          about what a person is.
+        </p>
+
+        <p>
+          SpecStudio's AIM software begins from a different premise.
+          And that premise has a long history.
+        </p>
+
+        <h2>Śaṅkarācārya's Insight</h2>
+
+        <p>
+          In eighth-century India, the Vedic philosopher Śaṅkarācārya articulated what remains
+          one of the most precise accounts of the structure of experience.
+          His system — <em>Advaita Vedānta</em>, non-dual Vedānta — does not begin with the world
+          and work inward; it begins with awareness itself as the fundamental experience,
+          and examines what can be known about it with certainty.
+        </p>
+
+        <p>
+          The central claim is deceptively simple: there is a knowing subject, and it is
+          categorically and experientially different from the objects it knows.
+          The body appears in awareness; thoughts appear in awareness.
+          Sensations, emotions, memories, intentions — all appear in awareness as objects of experience.
+          The subject that knows them cannot itself be any of them, for the same reason
+          that an eye cannot see itself seeing.
+        </p>
+
+        <p>
+          Śaṅkara calls this knowing subject <em>Ātman</em> — the Self — and he argues through
+          careful logical analysis that it is identical with <em>Brahman</em>,
+          the ground of all existence and appearance. The famous formulation <em>tat tvam asi</em> —
+          "That thou art" — is neither a poetic sentiment nor a pedantic doctrine,
+          but a precise philosophical claim: the ultimate ground of reality and the witness
+          of experience are the same.
+        </p>
+
+        <p>
+          From this foundation, Śaṅkara develops a complete ontological architecture:
+          three levels of reality — <em>prātibhāsika</em> (illusory), <em>vyāvahārika</em> (conventional)
+          and <em>pāramārthika</em> (ultimate) — organized by the principle that what appears
+          in one context and disappears in another cannot be fully real.
+        </p>
+
+        <p>
+          Śaṅkara's analysis of three states of consciousness — <em>jāgrat</em> (waking),
+          <em>svapna</em> (dream), and <em>suṣupti</em> (deep sleep) — establishes that what is absent
+          in deep sleep and present in waking cannot be the Self, which persists through all three.
+          The theory of <em>adhyāsa</em> (superimposition) — the mechanism that mistakenly identifies
+          the conditioned with the unconditioned — produces the appearance of an individual
+          empirical self experiencing a separate world.
+        </p>
+
+        <p>
+          This is not mysticism in the sense of being beyond reason.
+          It is a rigorous metaphysical system built on careful inference from what can be observed
+          in direct experience. Śaṅkara writes as a philosopher who expects to be argued with.
+        </p>
+
+        <h2>A Proof Assistant Meets an Ancient System</h2>
+
+        <p>
+          Twelve centuries later, software engineer Matthew Scherf asked a precise question:
+          is <em>Advaita Vedānta</em> internally logically consistent? Not whether it is true
+          in some ultimate sense, but whether the system as Śaṅkara constructed it —
+          its axioms, defined terms and theorems — holds together without contradiction.
+        </p>
+
+        <p>
+          To answer this, Scherf did something that has no precedent in the history of philosophy:
+          he formalized the entire system in Lean 4, a modern proof assistant used by mathematicians
+          to verify the correctness of formal proofs. He translated Śaṅkara's metaphysics into
+          first-order logic — 69 axioms across ten modules covering the fundamental ontology,
+          the three levels of reality, the <em>māyā</em> doctrine, the five sheaths (<em>pañca-kośa</em>),
+          the three-state analysis (<em>avasthā-traya</em>), and the witness-consciousness theory
+          (<em>sākṣin</em>) — and then allowed the proof assistant to verify that all the theorems
+          follow from the axioms without contradiction.
+        </p>
+
+        <p>
+          The result: the system compiles. No errors. The proof assistant confirms that
+          <em>Advaita Vedānta</em>, as formalized, is logically consistent.
+        </p>
+
+        <p>
+          This is a remarkable result for several reasons. It is, as Scherf notes,
+          the first formal verification of a non-western philosophical system.
+          It does not prove that <em>Advaita</em> is metaphysically correct —
+          formal consistency is a necessary but not sufficient condition for truth.
+          But it establishes something that centuries of debate left open:
+          the system Śaṅkara built is coherent; its conclusions follow from its premises;
+          there are no hidden contradictions.
+        </p>
+
+        <p>
+          Scherf is also clear about what the formalization cannot capture.
+          <em>Māyā</em> is classically described as <em>sadasadvilakṣaṇa</em> — "neither real nor unreal" —
+          a status that classical logic cannot express. The performative dimension of the
+          <em>mahāvākyas</em>, utterances whose function is to trigger recognition rather than
+          communicate propositions, lies outside any formal system.
+          <em>Mokṣa</em> (liberation) is not the production of a new state but the recognition
+          of what was always the case — which is equally resistant to logical representation.
+        </p>
+
+        <blockquote>
+          A formalization that claimed to capture everything would be suspect.
+          One that knows precisely where it stops is trustworthy.
+        </blockquote>
+
+        <h2>What This Has to Do with AI</h2>
+
+        <p>
+          The connection to artificial intelligence is not metaphorical.
+        </p>
+
+        <p>
+          When we ask what an AI interaction system should be, we implicitly ask what kind of entity
+          a human being is: what a person brings to an interaction that the system needs to respect,
+          preserve, and work with rather than simply model and optimize.
+        </p>
+
+        <p>
+          The behaviorist answer produces one kind of system. The <em>Advaita</em> answer produces another.
+        </p>
+
+        <p>
+          If the knowing subject is not reducible to its objects — if awareness is not a product
+          of the brain's activity but its ground; not a variable in the system but the constant field
+          in which all variables appear — then an AI system designed for genuine human use has to be
+          built differently. It cannot treat the user as a preference profile. It cannot optimize
+          for engagement as if engagement were the goal. It has to preserve what <em>Advaita</em> calls
+          orientation: the user's sense of where they are, what they are doing, and why —
+          their continuity as a knowing subject across the interaction.
+        </p>
+
+        <p>
+          This is the foundation on which SpecStudio's Advaita Inquiry Matrix (AIM) is built.
+          Not as a design metaphor borrowed from an interesting tradition, but as an actual
+          conceptual architecture: the distinction between conditioned and unconditioned;
+          the three levels of reality as a framework for understanding what kind of claim
+          a piece of information is making; the <em>sākṣin</em> or conscious witness as the model
+          for what a system should support rather than supplant; the analysis of <em>adhyāsa</em>
+          as a lens for understanding where AI systems characteristically go wrong —
+          mistaking the conditioned for the unconditioned, the appearance for the ground.
+        </p>
+
+        <h2>What Witness-Centered Design Solves</h2>
+
+        <p>
+          The approach that follows from this foundation has a name: <strong>witness-centered design</strong>.
+          It is worth being specific about the problems it addresses, because they are real, named, and growing.
+        </p>
+
+        <p>
+          <strong>The context collapse problem.</strong> Current AI systems have no stable model of where
+          the user is in their own thinking. Each exchange is locally coherent but the overall interaction
+          drifts — the system follows the conversation rather than maintaining coherent orientation toward
+          the user's actual goal. This is <em>adhyāsa</em> at the user-interface level: the system mistakes
+          the surface of the conversation for its ground. The witness-centered model addresses this
+          structurally. The system's job is not just to respond fluently to each prompt but to preserve
+          the user's orientation — their sense of direction, continuity, and purpose — across the entire interaction.
+        </p>
+
+        <p>
+          <strong>Preference optimization as a trap.</strong> Recommendation systems, engagement loops,
+          and increasingly AI assistants optimize for revealed preferences — what you click,
+          what you ask for, what keeps you in the session. But preferences are conditioned objects;
+          they appear in awareness and are frequently mistaken for the self's actual needs.
+          <em>Adhyāsa</em> is precisely this mechanism: the conditioned mistaken for the ground,
+          the phenomenon mistaken for its substrate. A system that optimizes for the conditioned layer
+          will systematically steer users away from what they actually need in favour of what
+          the surface layer requests. Witness-centered design refuses this optimization as a matter
+          of architectural principle, not policy.
+        </p>
+
+        <p>
+          <strong>Psychological profiling.</strong> The most sophisticated current systems go further
+          than preference tracking. They construct behavioral and psychological models of users —
+          inferred personality traits, emotional states, cognitive patterns, predicted responses —
+          and use these models to shape the interaction. This is <em>adhyāsa</em> at industrial scale:
+          taking the conditioned surface — click patterns, dwell time, linguistic style, inferred mood —
+          and treating it as the ground truth of who the person is. But the person is the <em>sākṣin</em>,
+          the witness of all these patterns, not their sum or graph. A system built on that understanding
+          cannot profile, because profiling is a category error before it is a harm: it mistakes
+          an appearance for the reality that underlies it. The practical consequence of witness-centered
+          design is an interaction model that works with the user's intelligence rather than around it.
+        </p>
+
+        <p>
+          <strong>The authority problem.</strong> AI systems currently present outputs with a uniform
+          confidence that collapses the three levels of reality into one. A hallucinated fact and
+          a well-established one arrive in the same tone, with the same apparent weight.
+          The <em>Advaita</em> level framework — <em>prātibhāsika</em>, <em>vyāvahārika</em>,
+          <em>pāramārthika</em> — maps directly onto a design principle: the system should make explicit
+          what kind of claim is being made and at what level of certainty. Not all outputs are the same
+          kind of thing, or share the same level of reality, and an honest interface reflects that.
+        </p>
+
+        <p>
+          <strong>Dependency and displacement.</strong> The most corrosive effect of current AI interaction
+          design is that it replaces the user's own thinking rather than augmenting it. Users outsource
+          judgment, clarity, synthesis — the very capacities that make them capable of evaluating what
+          the system returns. This is the deepest form of <em>adhyāsa</em> in AI design: the system
+          presents itself as a knowing subject, and the user gradually accepts that framing.
+          Witness-centered design entirely inverts this: the user is the <em>sākṣin</em> (witness),
+          not the system. The system's intelligence is in service of the user's clarity,
+          never a replacement for it.
+        </p>
+
+        <p>
+          <strong>Ethical groundlessness.</strong> Most AI ethics frameworks are procedural —
+          rules about outputs, categories of harm to avoid. They do not address the underlying model
+          of the human being that the system is built on. If the user is modeled as a preference bundle,
+          certain harms are invisible by design, because the model cannot see them.
+          Witness-centered design grounds ethics in ontology: the user is a knowing subject,
+          not reducible to their data or behaviour, and the system's obligations follow directly from that.
+          This is not an ethical policy added on top of an existing architecture;
+          it is what the architecture produces when the foundation is correct.
+        </p>
+
+        <h2>The Human Cost of Getting This Wrong</h2>
+
+        <p>
+          The problems described above are not theoretical; they are showing up in clinical observations,
+          developer forums, educational research, and workplace productivity studies — a cluster of symptoms
+          that so far have no common diagnosis, but share a common cause.
+        </p>
+
+        <p>
+          What is being called "AI psychosis" in online communities describes a genuine perceptual disturbance:
+          users who interact heavily with current AI systems report increasing difficulty distinguishing
+          their own thinking from AI-generated output, their own voice from a statistically averaged one.
+          This is not hyperbole: when a system is designed to produce fluent, confident, contextually
+          appropriate text at scale, and when the user's own cognitive output gradually recedes in the
+          interaction, the boundary between self and system becomes genuinely unclear.
+          <em>Adhyāsa</em> (superimposition) is not a metaphor here; it is a description of what is
+          happening neurologically and psychologically. The conditioned output of the system is being
+          superimposed on the user's own unconditioned awareness, and the user is losing the thread
+          of the distinction.
+        </p>
+
+        <p>
+          <strong>Student learning atrophy</strong> follows the same logic at a slower pace.
+          The cognitive struggle that produces genuine understanding — the effort of working through
+          a problem, of holding multiple framings simultaneously, of arriving at one's own synthesis —
+          is precisely what AI-assisted shortcuts eliminate. The output appears; the learning does not occur.
+          A generation of students is accumulating credentials built on a foundation of borrowed cognition,
+          with the bill not yet due.
+        </p>
+
+        <p>
+          <strong>The software engineering productivity paradox</strong> is perhaps the most precisely
+          documented instance. Studies of AI-assisted coding have found that developers using these tools
+          often report feeling more productive while producing less working, maintainable code.
+          The explanation is the same: the <em>sākṣin</em> — the developer's own comprehension, judgment,
+          and architectural sense — has been sidelined. Code is being generated without being understood.
+          The system produces tokens; the developer loses the thread of their own system.
+          What accumulates is not working software but the <em>appearance</em> of it,
+          which is a different and more dangerous thing.
+        </p>
+
+        <p>
+          <strong>Vibe-coding burnout</strong> is the emotional correlate: the exhaustion that comes
+          from trying to maintain orientation in a workflow specifically designed to dissolve it.
+          When the system is in the foreground and the developer is managing its outputs rather than
+          directing their own work, the sense of agency and craft that makes demanding work sustainable
+          simply drains away, leaving an existential void.
+        </p>
+
+        <p>
+          These symptoms are different manifestations of a single underlying failure: systems that
+          displace the witness rather than serving it. And they are producing, quite predictably,
+          a growing hostility toward AI that is often dismissed as technophobia or status anxiety,
+          but is in many cases something more diagnostically accurate — a correct intuition that
+          something is being taken, even when the taker cannot be named.
+        </p>
+
+        <p>
+          Witness-centered design does not merely avoid these failure modes as a side effect;
+          it addresses their cause. A system whose architecture is grounded in the primacy of the
+          knowing subject — the <em>sākṣin</em> as the constant that the interaction must preserve
+          and serve — cannot produce these outcomes without violating its own foundations.
+          The user's clarity, comprehension, and sense of authorship are not features to be balanced
+          against engagement metrics; they are the design goal from which everything else follows.
+        </p>
+
+        <p>
+          It should be noted that this is also a more viable long-term position for the AI industry
+          as a whole. The current trajectory — systems that are demonstrably eroding human cognitive
+          capacity while generating widespread unease — is not sustainable. The animosity building
+          toward AI is not irrational; it is a response to real harm being done by faulty design decisions.
+          Witness-centered design is not a concession to that animosity; it is a demonstration that
+          a different approach was always possible, and that the harms were choices, not inevitabilities.
+        </p>
+
+        <h2>Why This Matters Now</h2>
+
+        <p>
+          The current moment in AI development is characterized by extraordinary implementation
+          capability on an almost nonexistent philosophical foundation. Systems are being built at scale
+          on premises assumed, but that never have been closely examined. The implicit model of the
+          human being embedded in most AI products is thin enough to be dangerous — not through malice,
+          but through inattention to exactly the kind of questions Śaṅkara spent a lifetime working out.
+        </p>
+
+        <p>
+          Scherf's formalization matters because it closes a gap. The <em>Advaita</em> framework has
+          always been logically serious — serious enough to require a powerful proof assistant to verify.
+          It is now also formally available as a foundation: not just an ancient teaching transmitted
+          through commentary and practice, but a cleanly specified, verifiable system that can be
+          worked with by anyone willing to engage with it on its own terms.
+        </p>
+
+        <p>
+          SpecStudio's AIM is an attempt to work with it on those terms — to build AI interaction
+          architecture on a foundation that has actually been examined, that knows what it can and
+          cannot claim, and that seriously takes up the question of what a human being is before
+          deciding what kind of system should be built for that kind of being.
+        </p>
+
+        <p>
+          That is a different kind of starting point. It may be the right one.
+        </p>
+
+        <p>
+          Building on it requires a correspondingly different kind of development practice — one that
+          begins with a precise model of the knowing subject before a line of code is written,
+          and holds that model as the governing constraint throughout. The tools this demands are not
+          exotic: specification discipline, architectural clarity before implementation begins,
+          the careful and ongoing definition of what an AI system is for, and what it must never become.
+          What has been missing is not the methodology but the foundation beneath it: a coherent,
+          examined account of the human being that the system is built to serve.
+          That foundation now exists. The work of building on it can begin in earnest.
+        </p>
+
+        <p class="colophon">
+          Matthew Scherf's formalization is available at
+          <a href="https://github.com/matthew-scherf/Advaita" target="_blank" rel="noopener">github.com/matthew-scherf/Advaita</a>.
+          AIM is a project of SpecStudio.
+        </p>
+
+      </div>
+    </div>
+  </article>
+
+  <nav class="essay-nav">
+    <div class="container">
+      <div class="essay-nav-inner">
+        <a href="ai-generates-code-humans-define-systems.html" class="nav-link">← AI Generates Code. Humans Define Systems.</a>
+        <a href="index.html" class="nav-link">All Notes →</a>
+      </div>
+    </div>
+  </nav>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+        <small style="color: var(--muted); font-size: 0.8rem; display: block; margin-top: 6px;">© 2026 SpecStudio</small>
+      </div>
+
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="../projects.html">Projects</a>
+        <a href="index.html">Notes</a>
+        <a href="https://github.com/SpecStudio-net?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
