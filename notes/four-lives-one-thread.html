@@ -186,6 +186,31 @@
       border-color: var(--text);
     }
 
+    .beta-notice {
+      margin-top: 3rem;
+      padding: 24px 28px;
+      border: 1px solid rgba(124,138,161,0.35);
+      background: rgba(124,138,161,0.06);
+    }
+
+    .beta-notice p {
+      margin-bottom: 0;
+      font-size: 1rem;
+      color: rgba(231, 226, 217, 0.75);
+    }
+
+    .beta-notice a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.35);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .beta-notice a:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
     .prose .colophon {
       margin-top: 3rem;
       padding-top: 2rem;
@@ -531,6 +556,15 @@
         <p>
           The four lives were preparation. This is the work.
         </p>
+
+        <div class="beta-notice">
+          <p>
+            AIM has been enhanced with the Scherf API — a software library encoding Matthew Scherf's
+            machine-verified model of the knowing subject across three traditions, now available on
+            GitHub. AIM is currently in beta. To request access, contact
+            <a href="mailto:BetaTest@specstudio.net">BetaTest@specstudio.net</a>.
+          </p>
+        </div>
 
         <p class="colophon">
           Dev Bhagavān is the founder of <a href="https://specstudio.net">SpecStudio</a>,
