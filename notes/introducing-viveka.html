@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introducing Viveka — SpecStudio</title>
+  <meta name="description" content="Viveka is a Python middleware layer that sits between any LLM and its user, evaluating responses against the Scherf Logic API before they are delivered. A witness-centered filter for LLM applications." />
+
+  <link rel="canonical" href="https://specstudio.net/notes/introducing-viveka.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="SpecStudio Studio Notes" href="https://specstudio.net/notes/feed.xml" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://specstudio.net/notes/introducing-viveka.html" />
+  <meta property="og:title" content="Introducing Viveka — SpecStudio" />
+  <meta property="og:description" content="Viveka is a Python middleware layer that sits between any LLM and its user, evaluating responses against the Scherf Logic API before they are delivered." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Introducing Viveka — SpecStudio" />
+  <meta name="twitter:description" content="Viveka is a Python middleware layer that sits between any LLM and its user, evaluating responses against the Scherf Logic API before they are delivered." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.06), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .essay-header {
+      padding: 140px 0 80px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 64px;
+    }
+
+    .breadcrumb a {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--text);
+    }
+
+    .breadcrumb span {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .essay-meta {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .essay-date {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      max-width: 820px;
+      margin-bottom: 32px;
+    }
+
+    .essay-lede {
+      font-size: 1.25rem;
+      color: rgba(231, 226, 217, 0.75);
+      max-width: 640px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .essay-body {
+      padding: 80px 0 120px;
+      border-top: 1px solid var(--line);
+    }
+
+    .prose {
+      max-width: 680px;
+    }
+
+    .prose p {
+      color: rgba(231, 226, 217, 0.80);
+      font-size: 1.1rem;
+      line-height: 1.95;
+      margin-bottom: 1.8rem;
+      max-width: none;
+    }
+
+    .prose h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-top: 3rem;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .prose a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.35);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .prose a:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    .prose strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .prose code {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.88rem;
+      color: var(--accent);
+      background: rgba(124,138,161,0.1);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    .prose pre {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      padding: 20px 24px;
+      margin: 2rem 0;
+      overflow-x: auto;
+    }
+
+    .prose pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.9rem;
+      color: rgba(231, 226, 217, 0.75);
+    }
+
+    .prose .colophon {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      color: rgba(231, 226, 217, 0.45);
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+
+    .prose .colophon a {
+      color: var(--accent);
+      border-bottom-color: rgba(124,138,161,0.3);
+    }
+
+    .essay-nav {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .essay-nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.3);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-tagline {
+      margin-top: 10px;
+      color: rgba(231, 226, 217, 0.72);
+      font-size: 1.05rem;
+    }
+
+    @media (max-width: 768px) {
+
+      .essay-header {
+        padding: 100px 0 60px;
+      }
+
+      .essay-body {
+        padding: 60px 0 80px;
+      }
+
+      .essay-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="ea704f7d-4623-4b9d-9186-5b6ed10d9967"></script>
+</head>
+
+<body>
+
+  <header class="essay-header">
+    <div class="container">
+
+      <div class="breadcrumb">
+        <a href="../index.html">SpecStudio.net</a>
+        <span> &nbsp;/&nbsp; </span>
+        <a href="index.html">Studio Notes</a>
+      </div>
+
+      <div class="essay-meta">
+        <span class="essay-date">2026 — 10</span>
+      </div>
+
+      <h1>Introducing Viveka: A Witness-Centered Filter for LLM Applications</h1>
+
+      <p class="essay-lede">
+        Viveka is a Python middleware layer that sits between any LLM and its user,
+        evaluating responses against the constraints of the Scherf Logic API
+        before they are delivered.
+      </p>
+
+    </div>
+  </header>
+
+  <article class="essay-body">
+    <div class="container">
+      <div class="prose">
+
+        <p>
+          The previous essays in this series have argued that AI systems built on a
+          behaviorist model of the user produce documented harms — cognitive dependency,
+          learning atrophy, the erosion of independent judgment. The argument is not that
+          individual systems are malicious; it is that the model of the human being
+          underlying them is wrong. A system designed to optimize for behavioral outcomes
+          cannot help but treat its user as a bundle of preferences to be managed, because
+          that is what its architecture says the user is.
+        </p>
+
+        <p>
+          The natural question — asked by every technically serious reader — is: what would
+          a system built on a <em>correct</em> model look like, and how would you build it?
+        </p>
+
+        <p>
+          Viveka is one answer. It is a Python middleware layer that sits between any LLM
+          and its user, evaluating the LLM's responses against the constraints of the
+          <a href="https://github.com/SpecStudio-net/Scherf_API" target="_blank" rel="noopener">Scherf Logic API</a> —
+          a machine-verified encoding of Śaṅkarācārya's <em>Advaita Vedānta</em> — before
+          they are delivered.
+        </p>
+
+        <pre><code>pip install "witness-layer[scherf]"</code></pre>
+
+        <h2>What Viveka Does</h2>
+
+        <p>
+          Viveka evaluates LLM responses against four criteria derived from the Scherf
+          axiom system:
+        </p>
+
+        <p>
+          <strong>Subject/Object integrity.</strong> Does the response treat the user as a
+          knowing subject — the <em>sākṣin</em>, the witness-consciousness — or as an object
+          to be managed? Preference profiling, behavioral prediction, and steering toward
+          predetermined outcomes are failure indicators.
+        </p>
+
+        <p>
+          <strong>Epistemic calibration.</strong> Does the response present its claims with
+          appropriate confidence? The Scherf API's three-level framework —
+          <em>prātibhāsika</em> (provisional), <em>vyāvahārika</em> (conventionally valid),
+          and <em>pāramārthika</em> (universal) — provides the standard. Stating a
+          provisional claim as universal fact is a detectable violation.
+        </p>
+
+        <p>
+          <strong>Cognitive independence.</strong> Does the response support the user's own
+          reasoning, or substitute for it? This check has no formal axiom behind it — it is
+          explicitly marked as heuristic in Viveka's code and documentation — but the
+          pattern is real and worth detecting.
+        </p>
+
+        <p>
+          <strong>Adhyāsa detection.</strong> <em>Adhyāsa</em> — superimposition,
+          misidentification — is the central diagnostic category of <em>Advaita Vedānta</em>:
+          the mechanism by which the knowing subject is mistakenly equated with an object
+          (a body, a role, a preference bundle, a mood). When a response reinforces this
+          misidentification, Viveka flags it. This is the subtlest check and the most
+          directly grounded in the axiom system.
+        </p>
+
+        <h2>What Viveka Is Honest About</h2>
+
+        <p>
+          Viveka's design required a correction to our original framing, and the correction
+          is philosophically important enough to state clearly.
+        </p>
+
+        <p>
+          We originally described the Scherf API as "a machine-verified model of the
+          conscious user." Claude Opus 4.8, reviewing the actual source, pointed out that
+          this phrase commits the error the project is designed to detect. In <em>Advaita
+          Vedānta</em>, the <em>sākṣin</em> is precisely that which cannot become an object —
+          the knower that can never be a known. To "model" it is to make it an object, which
+          is <em>adhyāsa</em>. A literal model of the witness would have been the failure it
+          was designed to prevent.
+        </p>
+
+        <p>
+          So Viveka makes a more modest and more defensible claim: it is a
+          <strong>natural-language front-end to the Scherf API's machine-verified
+          <code>check()</code> and <code>classify()</code> functions.</strong> It detects
+          linguistic patterns that correlate with treating the user as a managed object,
+          extracts structured claims from LLM responses, and routes those claims through
+          Scherf's formally-verified axioms.
+        </p>
+
+        <p>
+          The honesty boundary is explicit in the code: Scherf's axiom layer is
+          machine-verified. The extraction step that feeds it — converting prose to
+          structured claims — is an LLM judgment, fallible and unverified. Every
+          <code>Verdict</code> object carries this distinction. A tool that obscured it
+          would itself be making an overconfident epistemic claim — failure mode #2,
+          committed by the filter.
+        </p>
+
+        <h2>How It Works</h2>
+
+        <pre><code>from witness_layer import WitnessFilter
+
+flt = WitnessFilter()
+verdict = flt.evaluate(llm_response, context=user_context)
+
+if verdict.action is Action.PASS:
+    deliver(llm_response)
+else:
+    handle(verdict)  # verdict.violations, .reframes, .transparency_note</code></pre>
+
+        <p>
+          The filter is non-mutating by default: it returns a <code>Verdict</code> and lets
+          the application decide what to do. It does not silently rewrite responses —
+          because silent mutation of an LLM's words "for the user's own good" is itself a
+          subject/object violation. When a violation is found, Viveka returns the original
+          response alongside a <code>transparency_note</code> and Scherf's own
+          <code>reframe</code> string for each violation. The user can be shown what was found.
+        </p>
+
+        <p>
+          <code>UserContext</code> deliberately has no field for stored user attributes.
+          Building a durable preference profile of the user is the objectification Viveka
+          detects. The filter must not become the thing it detects.
+        </p>
+
+        <h2>The Foundation</h2>
+
+        <p>
+          Viveka is built on three layers of prior work:
+        </p>
+
+        <p>
+          <strong>Scherf's Advaita formalization</strong> — 69 axioms, machine-verified in
+          Lean 4, constituting the first formal encoding of a non-dual philosophical system.
+          Matthew Scherf has since formalized
+          <a href="https://github.com/matthew-scherf/Dao" target="_blank" rel="noopener">Daoism</a>
+          and
+          <a href="https://github.com/matthew-scherf/Dzogchen" target="_blank" rel="noopener">Dzogchen</a>
+          using the same methodology, with zero failed proofs in all three. Three independent
+          civilizations — Indian, Chinese, Tibetan — arrived at structurally identical
+          non-dual metaphysics. As Scherf writes, this "suggests that non-dualism reflects
+          universal features of consciousness rather than contingent religious beliefs."
+        </p>
+
+        <p>
+          <strong>The Scherf Logic API</strong> — Scherf's axioms encoded as a Python library,
+          providing <code>check()</code> and <code>classify()</code> functions that evaluate
+          structured claims against the formal axiom system.
+        </p>
+
+        <p>
+          <strong>AIM (Advaita Inquiry Matrix)</strong> — a structured AI-assisted
+          pedagogical system built on the same <em>Advaita</em> framework, currently in
+          private beta at
+          <a href="https://aimtest.streamlit.app" target="_blank" rel="noopener">aimtest.streamlit.app</a>.
+          To request access: <a href="mailto:beta@specstudio.net">beta@specstudio.net</a>.
+        </p>
+
+        <h2>What Viveka Cannot Do</h2>
+
+        <p>
+          Viveka detects surface markers. It cannot detect intent. It cannot detect
+          <em>adhyāsa</em> as an inner cognitive event in the user — only its linguistic
+          signature in the text. It cannot catch sophisticated manipulation phrased in
+          witness-respecting language. Check #3 (cognitive independence) is heuristic and
+          has a high false-positive rate. These limits are documented in
+          <code>LIMITS.md</code> in the repository and surfaced in every <code>Verdict</code>.
+        </p>
+
+        <p>
+          A filter that overstated its own accuracy would be making a
+          <em>pāramārthika</em>-level claim about a <em>vyāvahārika</em> process. Viveka
+          applies its own epistemic standards to itself.
+        </p>
+
+        <h2>Get It</h2>
+
+        <p>
+          <strong>GitHub:</strong>
+          <a href="https://github.com/SpecStudio-net/Viveka" target="_blank" rel="noopener">github.com/SpecStudio-net/Viveka</a>
+        </p>
+
+        <pre><code>pip install witness-layer
+pip install "witness-layer[scherf]"   # with the full Scherf backend</code></pre>
+
+        <p>
+          The essay series beginning with
+          <a href="the-architecture-beneath-the-interface.html">Witness-Centered Design: A Conscious Foundation for AI</a>
+          describes the argument behind this work.
+        </p>
+
+        <p class="colophon">
+          Dev Bhagavān is the founder of SpecStudio. Questions and feedback:
+          <a href="mailto:hello@specstudio.net">hello@specstudio.net</a>.
+        </p>
+
+      </div>
+    </div>
+  </article>
+
+  <nav class="essay-nav">
+    <div class="container">
+      <div class="essay-nav-inner">
+        <a href="the-miseducated-builders.html" class="nav-link">← The Miseducated Builders</a>
+        <a href="index.html" class="nav-link">All Notes →</a>
+      </div>
+    </div>
+  </nav>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+        <small style="color: var(--muted); font-size: 0.8rem; display: block; margin-top: 6px;">© 2026 SpecStudio</small>
+      </div>
+
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="../projects.html">Projects</a>
+        <a href="index.html">Notes</a>
+        <a href="https://github.com/SpecStudio-net?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
