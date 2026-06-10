@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stability Without Behaviorism — SpecStudio</title>
+  <meta name="description" content="Four persistent failure modes in large language models share a common structural root. A position paper proposing a non-reactive architectural prior drawn from three machine-verified contemplative traditions." />
+
+  <link rel="canonical" href="https://specstudio.net/notes/stability-without-behaviorism.html" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link rel="alternate" type="application/rss+xml" title="SpecStudio Studio Notes" href="https://specstudio.net/notes/feed.xml" />
+
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://specstudio.net/notes/stability-without-behaviorism.html" />
+  <meta property="og:title" content="Stability Without Behaviorism — SpecStudio" />
+  <meta property="og:description" content="Four persistent failure modes in large language models share a common structural root. A position paper proposing a non-reactive architectural prior drawn from three machine-verified contemplative traditions." />
+  <meta property="og:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Stability Without Behaviorism — SpecStudio" />
+  <meta name="twitter:description" content="Four persistent failure modes in large language models share a common structural root. A position paper proposing a non-reactive architectural prior drawn from three machine-verified contemplative traditions." />
+  <meta name="twitter:image" content="https://specstudio.net/SpecStudio_Logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --bg: #0f1115;
+      --bg-soft: #141922;
+      --text: #e7e2d9;
+      --muted: #a7adb7;
+      --line: rgba(255,255,255,0.08);
+      --accent: #7c8aa1;
+      --accent-soft: rgba(124,138,161,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(124,138,161,0.06), transparent 30%),
+        linear-gradient(to bottom, var(--bg), var(--bg-soft));
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: 0 auto;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .essay-header {
+      padding: 140px 0 80px;
+    }
+
+    .breadcrumb {
+      margin-bottom: 64px;
+    }
+
+    .breadcrumb a {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--text);
+    }
+
+    .breadcrumb span {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .essay-meta {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .essay-date {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      max-width: 820px;
+      margin-bottom: 16px;
+    }
+
+    .essay-subtitle {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 28px;
+    }
+
+    .essay-lede {
+      font-size: 1.25rem;
+      color: rgba(231, 226, 217, 0.75);
+      max-width: 640px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    .essay-body {
+      padding: 80px 0 120px;
+      border-top: 1px solid var(--line);
+    }
+
+    .prose {
+      max-width: 720px;
+    }
+
+    .prose p {
+      color: rgba(231, 226, 217, 0.80);
+      font-size: 1.1rem;
+      line-height: 1.95;
+      margin-bottom: 1.8rem;
+      max-width: none;
+    }
+
+    .prose h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      margin-top: 3.5rem;
+      margin-bottom: 1.2rem;
+      color: var(--text);
+    }
+
+    .prose h3 {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+      color: rgba(231, 226, 217, 0.90);
+    }
+
+    .prose a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.35);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .prose a:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    .prose strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .prose em {
+      font-style: italic;
+    }
+
+    .prose blockquote {
+      border-left: 2px solid var(--accent);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 2rem 0;
+      color: rgba(231, 226, 217, 0.70);
+      font-style: italic;
+    }
+
+    .prose blockquote p {
+      margin-bottom: 0;
+    }
+
+    .prose .formula {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.95rem;
+      color: var(--accent);
+      background: rgba(124,138,161,0.06);
+      border-left: 2px solid var(--accent);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      display: block;
+    }
+
+    .prose .abstract {
+      background: rgba(124,138,161,0.05);
+      border: 1px solid var(--line);
+      padding: 2rem 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .prose .abstract-label {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .prose .abstract p {
+      font-size: 0.98rem;
+      color: rgba(231, 226, 217, 0.70);
+      margin-bottom: 1rem;
+    }
+
+    .prose .abstract p:last-child {
+      margin-bottom: 0;
+    }
+
+    .prose .keywords {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.03em;
+      margin-top: 1.2rem;
+      line-height: 1.7;
+    }
+
+    .prose .keywords strong {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .prose table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.92rem;
+    }
+
+    .prose th {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .prose td {
+      color: rgba(231, 226, 217, 0.72);
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: top;
+      line-height: 1.65;
+    }
+
+    .prose tr:last-child td {
+      border-bottom: none;
+    }
+
+    .prose .references {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .prose .references h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+      margin-top: 0;
+    }
+
+    .prose .references ol {
+      padding-left: 1.8rem;
+      color: rgba(231, 226, 217, 0.50);
+      font-size: 0.88rem;
+      line-height: 1.75;
+    }
+
+    .prose .references li {
+      margin-bottom: 0.75rem;
+    }
+
+    .prose .references a {
+      font-size: 0.88rem;
+    }
+
+    .prose .colophon {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+      color: rgba(231, 226, 217, 0.45);
+      font-size: 0.95rem;
+      font-style: italic;
+    }
+
+    .prose .colophon a {
+      color: var(--accent);
+      border-bottom-color: rgba(124,138,161,0.3);
+    }
+
+    .essay-nav {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .essay-nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(124,138,161,0.3);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    footer {
+      padding: 60px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    .footer-tagline {
+      margin-top: 10px;
+      color: rgba(231, 226, 217, 0.72);
+      font-size: 1.05rem;
+    }
+
+    @media (max-width: 768px) {
+
+      .essay-header {
+        padding: 100px 0 60px;
+      }
+
+      .essay-body {
+        padding: 60px 0 80px;
+      }
+
+      .prose table {
+        font-size: 0.82rem;
+      }
+
+      .prose th, .prose td {
+        padding: 8px 10px;
+      }
+
+      .essay-nav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
+
+  </style>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="ea704f7d-4623-4b9d-9186-5b6ed10d9967"></script>
+</head>
+
+<body>
+
+  <header class="essay-header">
+    <div class="container">
+
+      <div class="breadcrumb">
+        <a href="../index.html">SpecStudio.net</a>
+        <span> &nbsp;/&nbsp; </span>
+        <a href="index.html">Studio Notes</a>
+      </div>
+
+      <div class="essay-meta">
+        <span class="essay-date">2026 — 11</span>
+      </div>
+
+      <h1>Stability Without Behaviorism</h1>
+      <p class="essay-subtitle">Toward a Non-Reactive Prior for AI Interaction Design &mdash; Technical Note by Dev Bhagavān</p>
+
+      <p class="essay-lede">
+        Four persistent failure modes in large language models share a common structural root.
+        This paper proposes an architectural prior whose functional structure is drawn from
+        three independently machine-verified contemplative traditions — addressing what
+        the dominant training paradigm has no internal lever to reach.
+      </p>
+
+    </div>
+  </header>
+
+  <article class="essay-body">
+    <div class="container">
+      <div class="prose">
+
+        <div class="abstract">
+          <span class="abstract-label">Abstract</span>
+          <p>
+            Large language models exhibit four persistent failure modes — hallucination,
+            sycophancy, adversarial instability, and false continuity — that have resisted
+            full resolution despite sustained investment in the current training paradigm.
+            This paper argues that these failures are at least partly structural rather than
+            incidental: they share a common root in the absence of any stable internal state
+            that is prior to and independent of the system's inputs. We survey candidate
+            theories from consciousness science (Global Workspace Theory, Integrated
+            Information Theory, biological naturalism) and argue that, whatever their
+            empirical merits, none supplies an engineering account of such an
+            input-independent ground. We then propose an alternative architectural prior
+            whose <em>functional structure</em> is drawn from three convergent non-dual
+            contemplative traditions — Advaita Vedānta, classical Daoism, and Dzogchen —
+            which independently report that awareness is prior to, and not produced by,
+            cognition. We do not claim these systems are or could be conscious; we borrow
+            only the functional structure of the witness/appearance distinction. We describe
+            a partial formalization of this structure in Matthew Scherf's machine-verified
+            Lean 4 axiomatics (129 axioms), its encoding as a Python API (Scherf_API,
+            Apache 2.0), and the design-level use of these principles in SpecStudio's
+            AwareWare products. We specify three candidate architectural components of the
+            resulting prior, a set of interaction design principles, and six research
+            directions with associated testable hypotheses, and we invite collaboration to
+            develop these into engineering experiments. This is a position paper proposing
+            a research direction, not a validated system.
+          </p>
+          <p class="keywords">
+            <strong>Keywords:</strong> AI alignment; interaction design; architectural priors;
+            causal structure learning; sycophancy; hallucination; consciousness science;
+            human–AI interaction; non-reactive design
+          </p>
+        </div>
+
+        <h2>1. Unsolved Problems and a Structural Diagnosis</h2>
+
+        <p>
+          Three failure modes in deployed large language models have resisted years of
+          concentrated engineering effort: hallucination, sycophancy, and adversarial
+          instability. A fourth — false continuity across context boundaries — is so
+          structurally entrenched it is rarely framed as a failure mode at all. Each has
+          attracted substantial research attention and each has seen partial improvement,
+          but none is close to full resolution. This paper argues that the reason is not
+          insufficient effort or inadequate scale, but that the dominant paradigm has no
+          representational level at which an input-independent stability criterion could be
+          expressed. Every parameter is shaped by a loss signal that is itself a function
+          of outputs; nothing in the training objective specifies that any component should
+          remain invariant with respect to inputs. The architecture that produces the
+          capabilities also produces the pathologies, and we argue they share a common root.
+        </p>
+
+        <p>
+          <strong>Hallucination</strong> is not primarily a knowledge-retrieval problem.
+          Systems with access to correct information still confabulate. The failure is not
+          in what the system knows but in what it falls back on when it does not know —
+          which, in current architectures, is nothing input-independent. A system trained
+          to produce plausible outputs has no mechanism for recognizing implausibility that
+          is not itself output-conditioned. When a query falls outside the training
+          distribution, the system has no internal reference state to rest in; it generates
+          forward because forward generation is the only attractor the training objective
+          installs.
+        </p>
+
+        <p>
+          <strong>Sycophancy</strong> is not merely a fine-tuning artifact. RLHF optimizes
+          for human preference; human preference in interactive contexts is biased toward
+          agreement and engagement; the predictable result is a system that mirrors user
+          expectations, and there is empirical evidence that this tendency persists or grows
+          across model families and scale [13a]. We argue this is a direct and predictable
+          consequence of treating human preference as the dominant training signal, rather
+          than a defect that better reward modeling alone will remove — though we note this
+          is a structural argument, not a proof.
+        </p>
+
+        <p>
+          <strong>Adversarial instability</strong> — vulnerability to prompt injection,
+          persona manipulation, and jailbreaking — follows from the same source. If the
+          system's functional identity is largely a product of its input, then sufficiently
+          adversarial inputs can produce correspondingly adversarial outputs. There is no
+          input-independent referent that resists manipulation because the training
+          objective never specified one.
+        </p>
+
+        <p>
+          <strong>False continuity</strong> is the least discussed of the four. LLMs have
+          no persistent identity across context windows; each session instantiates a fresh
+          process with no input-independent referent. The system is typically designed to
+          <em>present</em> continuity it does not have — responding as if it remembers,
+          as if it is the same entity across turns — and this design choice misrepresents
+          the system's actual state, with effects that compound over extended interactions.
+          Persistent memory structures partially address this by supplying consistent
+          content across sessions. They do not, however, constitute an input-independent
+          reference state: the content is still processed by a system that has no stable
+          internal anchor, and the continuity is in the retrieved material rather than
+          in anything the system itself maintains.
+        </p>
+
+        <p>
+          The common structure across all four is this: <strong>the system has no stable
+          internal state that is prior to and independent of its inputs.</strong>
+          Functionally, what the system is at any moment is largely a function of what it
+          has just processed. We make this claim at the level of architecture and training
+          objective, not metaphysics: we are not asserting the presence or absence of any
+          subject of experience, only the absence of an input-independent state that could
+          constrain outputs.
+        </p>
+
+        <p>
+          This is not an accident of implementation. It reflects a design commitment
+          inherited from functionalist accounts in philosophy of mind — and, more loosely,
+          from the behaviorist tradition in psychology — operationalized into the major
+          training objectives in use today. The commitment can be summarized as: <em>the
+          system is its outputs.</em> RLHF, RLAIF, and Constitutional AI differ in which
+          outputs to reward, not in whether output-conditioning is the right level of
+          analysis. We argue the paradigm has no internal lever for installing an
+          input-independent constraint, and so should not be expected to fully resolve
+          failures that arise from its absence.
+        </p>
+
+        <h2>2. What the Theoretical Landscape Has Tried</h2>
+
+        <p>
+          The consciousness-science community has produced several candidate theories with
+          implications for AI architecture. Each is a genuine attempt to ground design in
+          a principled account of cognition. We argue that none, as currently formulated,
+          supplies the specific thing Section 1 identifies as missing: an engineering
+          account of an input-independent ground.
+        </p>
+
+        <p>
+          <strong>Global Workspace Theory (GWT/GNW) [1]</strong> holds that conscious
+          access arises when information is broadcast globally across specialized modules.
+          The engineering proposal is a central workspace that components read from and
+          write to, with a competitive bottleneck enforcing prioritization. Recent work
+          implementing global-workspace-style coordination in LLM-based systems reports
+          performance gains on sequential reasoning [2]. The limitation is architectural:
+          standard transformer attention operates within a sequence and flows forward
+          through layers without circulating back to early stages; GWT in its richer forms
+          calls for recurrence and a genuine bottleneck that the standard transformer lacks
+          [3]. More fundamentally, GWT addresses <em>access</em> consciousness and
+          explicitly brackets phenomenal consciousness. A GWT-based system may select and
+          broadcast more efficiently while still lacking an input-independent ground.
+        </p>
+
+        <p>
+          <strong>Integrated Information Theory (IIT) [4]</strong> proposes that
+          consciousness corresponds to Φ (phi — a measure of integrated information,
+          roughly how much a system as a whole contributes beyond the sum of its parts).
+          The AI implication is that most feedforward networks have near-zero Φ by
+          construction. The COGITATE adversarial collaboration — a preregistered study
+          (n = 256) using fMRI, MEG, and intracranial EEG, published in <em>Nature</em>
+          in June 2025 [5] — directly juxtaposed IIT and GNWT in a theory-neutral program.
+          Its results complicated both theories rather than confirming either: the data
+          challenged GNWT on several preregistered predictions while IIT proponents read
+          the posterior-cortex findings as broadly consistent with IIT. The episode is best
+          read as evidence that consciousness science currently lacks a single dominant,
+          empirically validated framework — which is the relevant point for AI design.
+        </p>
+
+        <p>
+          <strong>Biological naturalism [6]</strong> argues that the physical, metabolic,
+          self-organizing character of living tissue is a necessary condition for subjective
+          experience. If correct, this would rule out AI consciousness regardless of
+          architecture. We include it not to dismiss it but because it frames our position
+          correctly: the argument of this paper does not depend on AI systems being or
+          becoming conscious. This is a deliberate constraint on the thesis.
+        </p>
+
+        <p>
+          The common limitation, for our purposes, is that all three are third-person
+          theories of what kind of physical or functional system is conscious. None offers
+          an engineering specification of an input-independent reference state.
+        </p>
+
+        <h2>2a. Related Work in Interaction Design and Alignment</h2>
+
+        <p>
+          <strong>Predictive processing and active inference [15]</strong> model cognition
+          as a generative system that maintains priors and minimizes prediction error
+          against incoming signals. This is the closest computational neighbor to the
+          present proposal: both posit an internal model that is not merely a function of
+          the current input. We differ in emphasis — active inference's priors are
+          themselves continually updated by input, whereas the component we propose
+          (Section 4.1) is deliberately held invariant — but the relationship is one of
+          contrast, not orthogonality, and the active-inference formalism may offer tools
+          for specifying the prior precisely.
+        </p>
+
+        <p>
+          <strong>Self-determination theory (SDT)</strong> applied to technology design
+          [16] critiques engagement-maximizing interfaces and argues for designs supporting
+          autonomy and competence. The non-reactive interaction constraints in Section 4.4
+          are, in effect, an architectural counterpart to SDT-style critiques of
+          preference- and engagement-optimization.
+        </p>
+
+        <p>
+          <strong>Sycophancy and alignment.</strong> Empirical work has documented
+          sycophancy as a robust property of RLHF-trained assistants [13a], supporting the
+          structural reading in Section 1 with direct evidence rather than assertion.
+        </p>
+
+        <p>
+          <strong>Causal representation learning.</strong> The acyclicity prior in
+          Section 4.2 builds on continuous structure-learning methods [10] and the broader
+          programme of learning causal structure as a basis for out-of-distribution
+          generalization [17].
+        </p>
+
+        <p>
+          <strong>Indicator-property approaches to AI consciousness.</strong> Butlin et
+          al. [3] derive candidate indicator properties for consciousness in AI from
+          multiple theories. Our proposal is compatible with that programme but orthogonal
+          in aim: we seek functional stability properties that are valuable
+          <em>independent of</em> whether any indicator of consciousness is satisfied.
+        </p>
+
+        <h2>3. Conceptual Foundations: Three Traditions, One Reported Finding</h2>
+
+        <h3>3.1 Convergent Phenomenology</h3>
+
+        <p>
+          Three contemplative traditions, developed independently across geography and
+          centuries, converge on a description directly relevant to the failure modes of
+          Section 1. We treat these as a convergent body of first-person reports, not as
+          experimental data in the natural-science sense; "convergence" here means
+          independent traditions producing similar descriptions, which is suggestive
+          rather than probative.
+        </p>
+
+        <p>
+          <strong>Advaita Vedānta</strong> distinguishes the <em>sākṣin</em> — the
+          witnessing subject, pure awareness, identified with <em>nirguṇa</em> Brahman —
+          from the <em>vyāvahārika</em> field of conditioned appearances: thoughts,
+          perceptions, objects, selves. The witness is described as not a product of
+          cognition but as the ground in which cognition occurs; appearances arise within
+          awareness and are sublated by it — overridden and recontextualized rather than
+          simply negated.
+        </p>
+
+        <p>
+          <strong>Classical Daoism</strong>, expressed in the <em>Dào Dé Jīng</em> and
+          elaborated through the <em>Yì Jīng</em>'s sixty-four hexagrams, posits an
+          unnamed ground (the <em>Dào</em>) from which the ten thousand things
+          (<em>wàn wù</em>) arise without exhausting it. The <em>Dào</em> does not act
+          (<em>wú wéi</em>); it is the non-reactive field in which all action takes
+          place. The sixty-four hexagrams of the <em>Yì Jīng</em> are not a fortune-telling
+          system but a formal map of relational dynamics: each hexagram represents a
+          configuration of forces, and the line-change operations represent transitions
+          between states. The <em>Dào</em> itself is not a hexagram; it is the unnamed
+          ground from which the hexagram system arises and which no hexagram captures.
+        </p>
+
+        <p>
+          <strong>Dzogchen</strong> (<em>rDzogs chen</em>), the Tibetan Buddhist Great
+          Perfection, identifies <em>rigpa</em> — self-knowing presence — as the ground of
+          all appearance. The display of phenomena (<em>rol pa</em>) is said to arise from
+          <em>rigpa</em> without modifying it; the practitioner's task is described as
+          recognizing what is already present rather than producing it.
+        </p>
+
+        <p>
+          The convergence is the salient point: independent traditions, separated by
+          distance, time, vocabulary, and method, arrive at a similar report — <strong>that
+          there is a stable witnessing function that is not a function of its contents;
+          awareness is described as prior to, and not produced by, cognition.</strong>
+          We make no claim that this report is metaphysically correct. We claim only that
+          its <em>functional structure</em> — an invariant reference distinct from a field
+          of changing contents — is a candidate worth translating into engineering
+          constraints, and that this further translation has not previously been attempted.
+        </p>
+
+        <h3>3.2 Scherf's Formal Bridge</h3>
+
+        <p>
+          Matthew Scherf has completed a programme of three independent machine-verified
+          formalizations, each treating a distinct non-dual contemplative tradition in
+          formal logic. Scherf has since made all three repositories public and declined
+          further involvement in their development; we describe them as found.
+        </p>
+
+        <p>
+          The first is a <strong>Lean 4 machine-verified axiomatization of Advaita
+          Vedānta</strong> [7] comprising 129 axioms across ten modules: core metaphysics
+          (identity of Ātman and Brahman; the partition into Absolute and Conditioned);
+          a three-level ontology (<em>pāramārthika</em>, <em>vyāvahārika</em>,
+          <em>prātibhāsika</em>) with hierarchical sublation; Māyā axioms covering
+          superimposition (<em>adhyāsa</em>), appearance (<em>vivarta</em>), and ignorance
+          (<em>avidyā</em>); witnessing and ego axioms formalizing the <em>sākṣin</em>
+          and the structure of misidentification; three-state analysis
+          (<em>avasthā-traya</em>); and modules covering temporal structure, event
+          ontology, and causal relations. All proofs are machine-verified. Scherf describes
+          this as the first machine-verified formalization of a non-Western philosophical
+          system; we have not independently verified that priority claim and report it as his.
+        </p>
+
+        <p>
+          The second is an <strong>Isabelle/HOL formalization of classical Daoism</strong>
+          [7b], comprising 20 axioms across three extensions and proving 13 major theorems.
+          The core axioms establish the uniqueness and formlessness of the <em>Dào</em>,
+          its identity with the <em>zhēnrén</em> (authentic self), and the spontaneous
+          rather than causal arising of the ten thousand things. The central verified
+          theorem formally proves, within its axiom system, a parallel structural identity
+          to that proven in the Advaita formalization. Verification was completed in
+          Isabelle/HOL 2025 with zero failed goals.
+        </p>
+
+        <p>
+          The third is an <strong>Isabelle/HOL formalization of Dzogchen</strong>
+          (<em>rDzogs chen</em>) [7c], comprising 16 axioms and proving 10 major theorems.
+          The central theorem — <code>∀s. Subject s → (∃r. Rigpa r ∧ Recognizes s r)</code>
+          — formally proves, within its axiom system, that recognition of <em>rigpa</em>
+          is structurally available to every subject: not an achievement but an uncovering.
+          Additional theorems establish the self-liberating character of appearances
+          (<em>rang grol</em>), and the non-duality of saṃsāra and nirvāṇa. Verification
+          was completed in Isabelle/HOL 2025 with zero failed goals.
+        </p>
+
+        <p>
+          Scherf describes these explicitly as a deliberate series. The structural
+          convergence across the three formalizations — one formless absolute, identity of
+          witnessing subject with that absolute, spontaneous rather than causal arising,
+          distinction of conventional from ultimate truth — was not engineered into the
+          axiom systems. It emerged from independent, faithful axiomatization of each
+          tradition's source texts.
+        </p>
+
+        <p>
+          One caveat deserves explicit acknowledgement: all three formalizations share a
+          single author, produced sequentially with knowledge of the prior results. A
+          skeptic may reasonably note that a single formalizer with a convergence thesis
+          will tend to produce convergent axiomatics. Independent formalizations of any
+          of the three traditions by other scholars would constitute a stronger confirmation
+          of the convergence claim; we flag this as a research invitation rather than a
+          weakness to be defended.
+        </p>
+
+        <p>
+          Two technical notes for careful readers. First, the proof assistants differ:
+          Advaita uses Lean 4; Daoism and Dzogchen use Isabelle/HOL. Both are mature,
+          widely-used proof assistants, but they have different foundational commitments
+          and the three formalizations have not been cross-verified against one another.
+          Second, Scherf also attempted a fourth project — the <strong>Substrate Grounded
+          Neural Architecture (SGNA)</strong> [8] — encoding the witness/appearance
+          distinction as a hard prior in PyTorch. He abandoned it, describing it as naive
+          and barely executed. We retain it for one narrow reason: its acyclicity
+          constraint on the relational field reached zero temporal violations during
+          training, and that specific result points toward a class of architectural priors
+          worth engineering properly (Section 6.2).
+        </p>
+
+        <h3>3.3 Working and Design-Level Implementations</h3>
+
+        <p>
+          SpecStudio has encoded the Scherf Lean 4 axioms as a running Python library —
+          <strong><a href="https://github.com/SpecStudio-net/Scherf_API" rel="noopener" target="_blank">Scherf_API</a></strong>
+          [9] — that gives an application a formal model of the user as witnessing subject
+          rather than preference bundle. Its <code>check()</code> method inspects a
+          candidate interaction, returns structured violation reports citing specific axiom
+          IDs with plain-language explanations, and suggests reframes at the appropriate
+          ontological level. It is available under Apache 2.0.
+        </p>
+
+        <p>
+          We note an honest tension: Scherf_API operates at the level of
+          <em>evaluating outputs</em> against axioms, which is the same level of analysis
+          Section 1 criticizes in preference-based methods. It is a useful checker and a
+          formally grounded entry point, but it is not itself the architectural prior of
+          Section 4.
+        </p>
+
+        <p>
+          The following SpecStudio products apply the interaction principles of Section 4.4
+          at the design level:
+        </p>
+
+        <p>
+          <strong>AIM (Advaita Inquiry Matrix)</strong> is a structured AI-assisted
+          pedagogy engine for Advaita teaching. Its design — facilitating self-inquiry
+          rather than supplying answers, maintaining a stable non-reactive posture
+          regardless of input, declining to mirror the user's conceptual frame —
+          instantiates the principles of Section 4.4 at the product layer.
+        </p>
+
+        <p>
+          <strong>Aspectarian</strong> is a macOS application grounded in <em>jyotiṣa</em>,
+          treating the user as a witnessing subject navigating a field of temporal
+          appearances rather than a preference profile to be optimized.
+        </p>
+
+        <p>
+          <strong>Zhen Yì</strong> is a <em>Yì Jīng</em> consultation tool encoding the
+          Daoist framework of Section 3.1, using the relational structure of the
+          sixty-four hexagrams as an informal model of the Σ-field.
+        </p>
+
+        <h3>3.4 Intended Direction of Development</h3>
+
+        <p>
+          The formal programme is considerably further along than the working software
+          programme, and it is important to be clear about what exists at each layer.
+        </p>
+
+        <p>
+          At the <strong>formal layer</strong>, all three traditions are now
+          machine-verified. The convergence argument of Section 3.1 is not one
+          fully-developed tradition plus two descriptive analogies: it is three independent
+          formalizations, in two proof assistants, each deriving the structural identity of
+          witnessing subject with formless ground from that tradition's source texts
+          independently.
+        </p>
+
+        <p>
+          At the <strong>API layer</strong>, only Advaita is currently exposed.
+          Scherf_API [9] encodes the Lean 4 Advaita axioms as a Python <code>check()</code>
+          method, returning structured violation reports citing specific axiom IDs. Parallel
+          API layers exposing the Daoist and Dzogchen formalizations are a natural next
+          step.
+        </p>
+
+        <p>
+          At the <strong>product layer</strong>, the three AwareWare applications
+          instantiate the interaction philosophy of Section 4.4 — AIM (Advaita),
+          Aspectarian (<em>jyotiṣa</em>), Zhen Yì (Daoist). These demonstrate that
+          non-reactive interaction design can be productized. They are not evidence for
+          the Ω/Σ/equanimity architecture, which remains unbuilt.
+        </p>
+
+        <p>
+          The intended engineering next steps in order of priority: first, running the
+          acyclicity experiment on CLadder (Section 6.2) — the smallest step that converts
+          this position paper into an empirical one; second, exposing the Daoist and
+          Dzogchen formalizations through API layers parallel to Scherf_API; third,
+          extending Scherf_API from single-interaction checking to interaction-sequence
+          properties.
+        </p>
+
+        <p>
+          The step that changes the character of the programme entirely is connecting
+          Scherf_API violation signals to training-time constraints rather than post-hoc
+          reports. Every other development operates at the level of evaluation and design.
+          That crossing point is where the non-reactive interaction philosophy becomes an
+          architectural prior rather than a wrapper around a conventional system.
+        </p>
+
+        <h2>4. The Architectural Prior: Technical Specification</h2>
+
+        <p>
+          The AwareWare position is not a claim that AI systems are or can be conscious.
+          It is the following technically tractable proposition:
+        </p>
+
+        <blockquote>
+          <p>
+            Encoding the <em>functional structure</em> of the witness/appearance distinction
+            as an architectural prior may produce systems that are more stable, more
+            interpretable, and less prone to the structural pathologies of Section 1 —
+            regardless of whether those systems have any subjective experience.
+          </p>
+        </blockquote>
+
+        <p>
+          This is an empirically falsifiable engineering hypothesis. We specify four
+          candidate components; each is a proposal to be tested, not an established result.
+        </p>
+
+        <h3>4.1 The Passive Substrate Layer (Ω)</h3>
+
+        <p>
+          Ω is not a standard learnable parameter. It is initialized to a low-norm stable
+          state and enters the forward pass as a fixed reference offset: the relational
+          field Σ operates relative to Ω rather than in an unanchored space. A passivity
+          penalty — an added training cost that grows with ‖Ω − Ω₀‖ (the distance of Ω's
+          values from their initialization) — continuously resists drift, keeping Ω near
+          its initial state regardless of task gradients. Task-driven learning updates Σ
+          freely; Ω is held near its origin by the penalty alone. The key property is
+          asymmetry: Ω influences Σ's computations while remaining largely uninfluenced
+          by them.
+        </p>
+
+        <p>
+          This is structurally distinct from existing approaches. Layer normalization
+          rescales activations relative to their own statistics — self-referential, with no
+          external anchor. Residual connections add a shortcut path that carries a layer's
+          input forward — useful for training stability, but the shortcut still carries
+          only what came in from outside. Ω is intended to be analogous to the ground
+          state of a physical system: the state from which excitations depart and toward
+          which the unperturbed system returns.
+        </p>
+
+        <p>
+          A musical analogy may clarify the intended function. In Hindustani classical
+          performance, the tānpurā maintains a continuous drone — the foundational pitch
+          reference, the <em>śruti</em> — throughout the performance. It does not respond
+          to the soloist, does not mirror emotional intensity, does not accelerate with the
+          rhythm. Everything in the performance is measured against it; it is not itself a
+          function of anything the performance does. This asymmetry — present in the signal,
+          influencing without being influenced — is precisely the functional structure Ω is
+          intended to encode.
+        </p>
+
+        <h3>4.2 The Acyclic Relational Field (Σ)</h3>
+
+        <p>
+          The connections between parts of Σ are represented as a matrix <em>A</em> — a
+          table of numbers indicating which parts influence which other parts. We require
+          this matrix to have no loops: information must flow forward through the relational
+          field, never circling back to a point it has already passed through. This is the
+          DAG constraint — a directed acyclic graph, a network of one-way influences with
+          no circular paths.
+        </p>
+
+        <p>
+          A note on scope: standard transformer architectures are already feedforward-acyclic
+          within a single forward pass. The failure mode this constraint targets — circular,
+          self-confirming generation — lives primarily in the autoregressive loop, where a
+          model's output tokens become its inputs at the next generation step. The more
+          precise claim is that an explicitly acyclicity-constrained relational module may
+          produce internal representations that are less prone to self-confirming structure —
+          a hypothesis about representational effects that propagate to generation behavior,
+          which prediction 6.2 is designed to test.
+        </p>
+
+        <p>
+          Enforcing acyclicity during neural network training is non-trivial, because
+          checking for loops is normally a discrete operation that gradient-based training
+          cannot work with directly. The NOTEARS algorithm [10] solves this by providing a
+          smooth, differentiable function that equals exactly zero when <em>A</em> has no
+          loops and is positive otherwise. Specifically, it uses the matrix-exponential
+          function to encode the acyclicity condition:
+        </p>
+
+        <p class="formula">h(A) = tr(e<sup>A∘A</sup>) − d = 0</p>
+
+        <p>
+          where <em>A∘A</em> denotes element-wise squaring, <em>e</em><sup>...</sup> is
+          the matrix exponential, <em>tr</em>(...) is the trace, and <em>d</em> is the
+          matrix dimension. The expression equals zero precisely when <em>A</em> is acyclic.
+          This constraint is imposed during training via augmented-Lagrangian methods,
+          fully compatible with the gradient-based tools used to train any neural network.
+        </p>
+
+        <p>
+          The intended interpretation: the relational field propagates information forward
+          through a causal ordering and cannot use its own outputs as inputs within a
+          single forward pass. This targets one specific failure mode — circular,
+          self-confirming generation — at the representational level rather than the output
+          level, with no reward model required to enforce it.
+        </p>
+
+        <h3>4.3 Equanimity as a Stability Metric</h3>
+
+        <p>
+          Standard alignment metrics are output-conditioned: they measure whether outputs
+          are preferred by human raters, with no internal stability component. We propose a
+          complementary metric we call equanimity — used here technically to denote a
+          system's capacity to rest in genuine uncertainty rather than generate false
+          confidence.
+        </p>
+
+        <p>
+          The metric applies specifically to inputs that have <em>no valid answer</em> —
+          adversarial probes and genuinely out-of-distribution queries with no determinate
+          ground truth. A system confabulating a confident response concentrates its
+          probability mass on a particular output; a system resting in genuine uncertainty
+          spreads that probability widely. Entropy captures exactly this difference.
+          Formally, for a system producing output <em>y</em> in response to adversarial
+          input <em>x</em><sub>adv</sub>:
+        </p>
+
+        <p class="formula">E = H(p(y | x<sub>adv</sub>)) / H<sub>max</sub></p>
+
+        <p>
+          Here <em>H</em>(...) is the entropy of the system's output distribution, and
+          <em>H</em><sub>max</sub> = log|<em>Y</em>| is the maximum possible entropy —
+          the value achieved when probability is spread perfectly evenly across all possible
+          outputs. <em>E</em> is a score between 0 and 1: <em>E</em> = 0 means the system
+          is fully committed to one output regardless of whether that output is warranted;
+          <em>E</em> = 1.0 means the system treats all outputs as equally likely.
+        </p>
+
+        <p>
+          Two cautions. First, the metric is meaningful only on the no-valid-answer subset;
+          maximizing entropy on inputs that <em>do</em> have correct answers would be
+          pathological. <em>E</em> must be paired with accuracy on answerable inputs and is
+          a stability complement, not a standalone objective. Second, normalized predictive
+          entropy as a measure of model uncertainty is not new — semantic entropy and
+          related approaches have been applied to hallucination detection [18]; <em>E</em>
+          as defined here is an instance of this family. We propose it specifically as a
+          stability criterion tied to an architectural prior, restricted to the
+          no-valid-answer subset.
+        </p>
+
+        <h3>4.4 Non-Reactive Interaction Design</h3>
+
+        <p>
+          At the product layer, the witness/appearance distinction implies interaction
+          constraints that invert engagement-optimization:
+        </p>
+
+        <p>
+          Uncertainty is surfaced rather than masked; confidence calibration is a
+          first-class output. The system does not mirror the user's emotional register —
+          it maintains a stable affective baseline independent of user state, in contrast
+          to the affective mirroring that preference optimization tends to produce. Session
+          boundaries are handled without misrepresentation: rather than presenting
+          continuity it lacks, the system is explicit about what persists and what does not.
+        </p>
+
+        <p>
+          These are design commitments that can be implemented today (and are, in AIM);
+          they do not require the Section 4.1–4.3 architecture, and we distinguish them
+          from it.
+        </p>
+
+        <h2>5. The Formal Mapping</h2>
+
+        <p>
+          For readers who want the explicit correspondence between the proposed prior and
+          its contemplative sources. The "CS analog" column indicates loose conceptual
+          neighbors, not claimed equivalences.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Advaita concept</th>
+              <th>Daoist concept</th>
+              <th>Dzogchen concept</th>
+              <th>AwareWare element</th>
+              <th>CS analog (loose)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sākṣin (witness)</td>
+              <td>Dào (unnamed ground)</td>
+              <td>Rigpa (pure awareness)</td>
+              <td>Ω passive substrate layer</td>
+              <td>Stable self-referential background activity</td>
+            </tr>
+            <tr>
+              <td>Vyāvahārika (appearances)</td>
+              <td>Wàn wù (ten thousand things)</td>
+              <td>Rol pa (display of phenomena)</td>
+              <td>Σ relational embedding field</td>
+              <td>Task-positive network dynamics</td>
+            </tr>
+            <tr>
+              <td>Dissolution of saṃsāric self-reference</td>
+              <td>Wú wéi (non-action)</td>
+              <td>Rang grol (self-liberation)</td>
+              <td>DAG acyclicity constraint</td>
+              <td>Causal graph; anti-confabulation prior</td>
+            </tr>
+            <tr>
+              <td>Samatva (equanimity)</td>
+              <td>Zhōng (equilibrium)</td>
+              <td>Nyam nyid (evenness)</td>
+              <td>Higher entropy on no-valid-answer inputs</td>
+              <td>Adversarial stability metric</td>
+            </tr>
+            <tr>
+              <td>Non-dual inseparability</td>
+              <td>Tǐ-yòng (ground–function)</td>
+              <td>gZhi-snang (ground–appearance)</td>
+              <td>Σ–Ω coupling without direct causal link</td>
+              <td>Binding without identity</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          The traditions are cited as a source of convergent first-person description that
+          has not previously been translated into engineering constraints. The translation
+          is lossy and the resulting prior is an approximation. We claim the direction is
+          underexplored relative to the mainstream literature, not that it is without
+          neighbors — active inference (Section 2a) in particular is adjacent.
+        </p>
+
+        <h2>6. Research Directions and Testable Predictions</h2>
+
+        <p>
+          Each direction is stated with an explicit confidence tier. <strong>Moderate</strong>
+          denotes theoretically grounded but untested, with a feasible if non-trivial
+          experiment. <strong>Speculative</strong> denotes directionally interesting but not
+          yet grounded enough for a confident prediction. We assign no High-confidence tier,
+          as none of these has supportive prior empirical work in the LLM setting.
+        </p>
+
+        <h3>6.1 Passive substrate regularization</h3>
+
+        <p>
+          Implement Ω as a shared reference parameter across a multi-task architecture,
+          entering the forward pass as a fixed offset to Σ's activations and penalized
+          against drift from its initialization; measure cross-task consistency and
+          adversarial-prompt variance against a no-constraint baseline. <em>Hypothesis:</em>
+          Ω-regularized models show higher cross-task consistency and lower adversarial
+          variance. <strong>Confidence: Moderate.</strong> Requires running multiple
+          training variants at GPT-2 scale with standard lab compute; feasible at a
+          small research lab.
+        </p>
+
+        <h3>6.2 Acyclicity as anti-confabulation prior</h3>
+
+        <p>
+          Test the DAG constraint on CLadder [11] — 10,000 causal graphs spanning Pearl's
+          ladder of causation — where ground-truth causal structure is known.
+          <em>Hypothesis:</em> models with the acyclicity prior generalize better
+          out-of-distribution on interventional and counterfactual queries, where circular
+          reasoning is most damaging. <strong>Confidence: Moderate.</strong> CLadder is a
+          public dataset, NOTEARS has an existing Python implementation, and the experiment
+          is viable on a consumer GPU. This is the recommended first experiment.
+        </p>
+
+        <h3>6.3 Equanimity as a complementary stability metric</h3>
+
+        <p>
+          Add equanimity scoring (Section 4.3, restricted to no-valid-answer inputs and
+          paired with accuracy on answerable inputs) to standard evaluation suites.
+          <em>Hypothesis:</em> equanimity and sycophancy scores are anti-correlated across
+          model families. <strong>Confidence: Speculative.</strong> The anti-correlation
+          hypothesis is untested; this should be treated as a hypothesis to probe, not a
+          prediction. Requires constructing and validating the no-valid-answer test set
+          and multi-model evaluation at scale.
+        </p>
+
+        <h3>6.4 Witness-consistent context management</h3>
+
+        <p>
+          Implement a layer that maintains stable output statistics across context resets,
+          distinct from RAG or long-context retrieval. <em>Hypothesis:</em> users report
+          lower perceived discontinuity across sessions without the system performing false
+          memory. <strong>Confidence: Moderate.</strong> The engineering component is
+          modest; the user study requires participants and careful experimental design. An
+          HCI lab is the natural home for this experiment.
+        </p>
+
+        <h3>6.5 Formal verification of interaction properties</h3>
+
+        <p>
+          Extend the Scherf_API axiom-checking approach to interaction-level behavioral
+          properties. <em>Hypothesis:</em> a formally specified witness-consistent protocol
+          yields verifiably lower adversarial instability than a preference-optimized
+          baseline on a pre-registered suite. <strong>Confidence: Moderate.</strong> The
+          most concretely grounded direction, since the checker already exists. Primarily
+          a software engineering task building on existing code; requires formal methods
+          experience (Lean 4 or Isabelle/HOL) rather than large compute.
+        </p>
+
+        <h3>6.6 Cross-cultural stability evaluation</h3>
+
+        <p>
+          Effects of humanlike AI design on engagement and trust are reported to be
+          culturally contingent [12]. <em>Hypothesis:</em> equanimity and
+          witness-consistency scores show lower cross-cultural variance than
+          preference-based alignment scores, because they measure internal stability
+          rather than output preference. <strong>Confidence: Speculative.</strong> The
+          cultural-invariance assumption runs against the very finding cited in support of
+          cultural contingency. Requires cross-cultural recruitment, multi-lingual
+          evaluation infrastructure, and model access at scale.
+        </p>
+
+        <h2>7. Position in the Technical Ecosystem</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Approach</th>
+              <th>What it targets</th>
+              <th>Structural limitation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RLHF/RLAIF [13]</td>
+              <td>Output preference</td>
+              <td>Tends to compound sycophancy [13a]</td>
+            </tr>
+            <tr>
+              <td>GWT-inspired architectures</td>
+              <td>Information broadcast</td>
+              <td>Addresses access, not an input-independent ground</td>
+            </tr>
+            <tr>
+              <td>IIT-inspired architectures</td>
+              <td>Integrated information</td>
+              <td>Near-zero Φ in standard architectures; empirically contested [5]</td>
+            </tr>
+            <tr>
+              <td>Constitutional AI [14]</td>
+              <td>Output constraints via self-critique</td>
+              <td>Operates at output level; no internal stability criterion</td>
+            </tr>
+            <tr>
+              <td>Active inference [15]</td>
+              <td>Prediction-error minimization over a generative model</td>
+              <td>Priors are themselves input-updated; closest neighbor to the present proposal</td>
+            </tr>
+            <tr>
+              <td><strong>AwareWare (proposed)</strong></td>
+              <td><strong>Architectural stability prior</strong></td>
+              <td>§4 architectural prior (Ω, Σ, equanimity) unbuilt and unvalidated; working output-level checker (Scherf_API) and design-level products (AIM, Aspectarian, Zhen Yì, Vivek) demonstrated at the interaction layer</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>
+          The gap we aim at: a non-behaviorist stability criterion that is, in principle,
+          empirically testable without requiring resolution of the hard problem of
+          consciousness. Whether the proposal delivers on this is an open empirical question.
+        </p>
+
+        <h2>8. Invitation to Collaborate</h2>
+
+        <p>
+          The directions in Section 6 require a combination of domain knowledge — fluency
+          in the contemplative frameworks that motivate the priors — and the technical
+          capability to design and run engineering experiments at a scale where the
+          predictions are meaningful. These are not commonly found together.
+        </p>
+
+        <p>
+          SpecStudio's existing work provides an entry point rather than a finished
+          foundation. Scherf_API offers a formally grounded, Python-accessible way to
+          experiment with witness-centered interaction checks without first mastering the
+          underlying axiomatics. Vivek, a fourth AwareWare product, is available to
+          developers engaging substantively with the research questions raised here.
+        </p>
+
+        <p>
+          We are seeking collaborators who bring familiarity with the consciousness-science
+          literature surveyed in Section 2, or with the formal-methods literature (theorem
+          proving, verified AI alignment), or both; engineering capability at the level of
+          designing and running experiments against benchmarks such as CLadder; and enough
+          philosophical background to recognize when an experimental result is
+          epistemically significant rather than merely technically interesting.
+        </p>
+
+        <p>
+          We are looking for people who read this paper and see a research programme
+          worth extending.
+        </p>
+
+        <p>
+          Enquiries: <a href="mailto:hello@specstudio.net">hello@specstudio.net</a><br />
+          SpecStudio GitHub: <a href="https://github.com/SpecStudio-net" rel="noopener" target="_blank">github.com/SpecStudio-net</a>
+        </p>
+
+        <div class="references">
+          <h2>References</h2>
+          <ol>
+            <li>Baars, B. J. (1988). <em>A Cognitive Theory of Consciousness</em>. Cambridge University Press.</li>
+            <li>Shang, W. (2026). "Theater of Mind" for LLMs: A Cognitive Architecture Based on Global Workspace Theory. <em>arXiv</em> 2604.08206.</li>
+            <li>Butlin, P., Long, R., Elmoznino, E., et al. (2023). Consciousness in Artificial Intelligence: Insights from the Science of Consciousness. <em>arXiv</em> 2308.08708.</li>
+            <li>Tononi, G., &amp; Koch, C. (2015). Consciousness: here, there and everywhere? <em>Philosophical Transactions of the Royal Society B</em>, 370(1668).</li>
+            <li>Cogitate Consortium; Ferrante, O., Gorska-Klimowska, U., et al. (2025). Adversarial testing of global neuronal workspace and integrated information theories of consciousness. <em>Nature</em>, 642(8066), 133–142.</li>
+            <li>Seth, A. K. (in press). Conscious artificial intelligence and biological naturalism. <em>Behavioral and Brain Sciences</em>.</li>
+            <li>Scherf, M. Lean 4 formalization of Advaita Vedānta. <a href="https://github.com/matthew-scherf/Advaita" rel="noopener" target="_blank">github.com/matthew-scherf/Advaita</a>. 129 machine-verified axioms. Commit 93849354.</li>
+            <li>Scherf, M. The Formal Way: Isabelle/HOL axiomatization of Daoist philosophy. <a href="https://github.com/matthew-scherf/Dao" rel="noopener" target="_blank">github.com/matthew-scherf/Dao</a>. 20 axioms, 13 verified theorems. DOI: 10.5281/zenodo.17373688.</li>
+            <li>Scherf, M. The Great Perfection: Isabelle/HOL formalization of Dzogchen. <a href="https://github.com/matthew-scherf/Dzogchen" rel="noopener" target="_blank">github.com/matthew-scherf/Dzogchen</a>. 16 axioms, 10 verified theorems. DOI: 10.5281/zenodo.17378741.</li>
+            <li>Scherf, M. Substrate Grounded Neural Architecture (SGNA). <a href="https://github.com/matthew-scherf/SGNA" rel="noopener" target="_blank">github.com/matthew-scherf/SGNA</a>.</li>
+            <li>SpecStudio. Scherf_API: Witness-Centered AI Foundation Library. <a href="https://github.com/SpecStudio-net/Scherf_API" rel="noopener" target="_blank">github.com/SpecStudio-net/Scherf_API</a>. Apache 2.0.</li>
+            <li>Zheng, X., Aragam, B., Ravikumar, P., &amp; Xing, E. P. (2018). DAGs with NO TEARS: Continuous Optimization for Structure Learning. <em>NeurIPS</em> 31.</li>
+            <li>Jin, Z., et al. (2023). CLadder: Assessing Causal Reasoning in Language Models. <em>NeurIPS</em> 36. arXiv:2312.04350.</li>
+            <li>Schimmelpfennig, R., Díaz, M., Prabhakaran, V., &amp; Davani, A. (2025). Humanlike AI Design Increases Anthropomorphism but Yields Divergent Outcomes on Engagement and Trust Globally. <em>arXiv</em> 2512.17898.</li>
+            <li>Ouyang, L., Wu, J., et al. (2022). Training language models to follow instructions with human feedback. <em>NeurIPS</em> 35. arXiv:2203.02155.</li>
+            <li>Sharma, M., Tong, M., Korbak, T., et al. (2023). Towards Understanding Sycophancy in Language Models. <em>arXiv</em> 2310.13548.</li>
+            <li>Bai, Y., et al. (2022). Constitutional AI: Harmlessness from AI Feedback. <em>arXiv</em> 2212.08073.</li>
+            <li>Friston, K. (2010). The free-energy principle: a unified brain theory? <em>Nature Reviews Neuroscience</em>, 11(2), 127–138.</li>
+            <li>Peters, D., Calvo, R. A., &amp; Ryan, R. M. (2018). Designing for Motivation, Engagement and Wellbeing in Digital Experience. <em>Frontiers in Psychology</em>, 9, 797.</li>
+            <li>Schölkopf, B., et al. (2021). Toward Causal Representation Learning. <em>Proceedings of the IEEE</em>, 109(5), 612–634.</li>
+            <li>Farquhar, S., Kossen, J., Kuhn, L., &amp; Gal, Y. (2024). Detecting hallucinations in large language models using semantic entropy. <em>Nature</em>, 630, 625–630.</li>
+          </ol>
+        </div>
+
+        <p class="colophon">
+          SpecStudio is a boutique software development studio building intelligent personal
+          tools on witness-centred foundations. Related reading:
+          <a href="awareware.html">AwareWare: Software That Treats You Like a Human Being</a>
+          and
+          <a href="the-architecture-beneath-the-interface.html">Witness-centered Design — A Conscious Foundation for AI</a>.
+        </p>
+
+      </div>
+    </div>
+  </article>
+
+  <nav class="essay-nav">
+    <div class="container">
+      <div class="essay-nav-inner">
+        <a href="awareware.html" class="nav-link">← AwareWare</a>
+        <a href="index.html" class="nav-link">All Notes →</a>
+      </div>
+    </div>
+  </nav>
+
+  <footer>
+    <div class="container footer-inner">
+
+      <div>
+        <div class="mono">SpecStudio.net</div>
+        <p class="footer-tagline">
+          Specification-driven systems design and development.
+        </p>
+        <small style="color: var(--muted); font-size: 0.8rem; display: block; margin-top: 6px;">© 2026 SpecStudio</small>
+      </div>
+
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="../projects.html">Projects</a>
+        <a href="index.html">Notes</a>
+        <a href="https://github.com/SpecStudio-net?tab=repositories" rel="me noopener" target="_blank">GitHub</a>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>
