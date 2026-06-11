@@ -84,4 +84,10 @@
     <changefreq>never</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://specstudio.net/notes/the-speaker-not-the-transcript.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
